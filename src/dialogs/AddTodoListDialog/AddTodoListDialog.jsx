@@ -5,17 +5,28 @@ import Spacer from '@ui-kit/Spacer/Spacer';
 
 function getStateFromProps(props, state) {
   return {
+    ...state,
     show: props.show,
     prevProps: {
       show: props.show
-    },
-    title: state?.title,
-    description: state?.description
+    }
   };
 }
 
 class AddTodoListDialog extends React.Component {
-  state = getStateFromProps(this.props);
+  state = {
+    show: false,
+    prevProps: {
+      show: false
+    },
+    title: {
+      value: null,
+      isValid: false
+    },
+    description: {
+      value: null
+    }
+  };
 
   static getDerivedStateFromProps(props, state) {
     if (state.prevProps.show !== props.show) {
@@ -38,11 +49,12 @@ class AddTodoListDialog extends React.Component {
         show={this.props.show}
         title='Add new list'
         body={
-          <Form>
+          <Form as="div">
             <Form.Group controlId="title">
               <Form.Label>Title *</Form.Label>
               <Form.Control
-                placeholder="Enter title"
+                autoComplete="off"
+                placeholder="Enter title (3+ symbols)"
                 onChange={this.onTitleChange}
               />
             </Form.Group>
@@ -52,6 +64,7 @@ class AddTodoListDialog extends React.Component {
             <Form.Group controlId="description">
               <Form.Label>Description</Form.Label>
               <Form.Control
+                autoComplete="off"
                 as="textarea"
                 rows={3}
                 placeholder="Enter description"
@@ -61,6 +74,7 @@ class AddTodoListDialog extends React.Component {
           </Form>
         }
         confirmText='Add'
+        disableConfirm={!this.isFormValid()}
         onClose={this.onClose}
         onConfirm={this.onConfirm}
       />
@@ -68,24 +82,36 @@ class AddTodoListDialog extends React.Component {
   }
 
   onTitleChange = (e) => {
+    const value = e.target.value;
+    const isValid = value?.length >= 3;
     this.setState({
       ...this.state,
-      title: e.target.value
+      title: {
+        value,
+        isValid
+      }
     });
   }
 
   onDescriptionChange = (e) => {
     this.setState({
       ...this.state,
-      description: e.target.value
+      description: {
+        value: e.target.value
+      }
     });
   }
 
   resetFormState() {
     this.setState({
       ...this.state,
-      title: null,
-      description: null
+      title: {
+        value: null,
+        isValid: false
+      },
+      description: {
+        value: null
+      }
     });
   }
 
@@ -96,10 +122,14 @@ class AddTodoListDialog extends React.Component {
 
   onConfirm = () => {
     this.props.onConfirm({
-      title: this.state.title,
-      description: this.state.description
+      title: this.state.title.value,
+      description: this.state.description.value
     });
     this.resetFormState();
+  }
+
+  isFormValid() {
+    return this.state.title?.isValid;
   }
 }
 

@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import Checkbox from '@ui-kit/Checkbox/Checkbox';
-import classes from "./TodoListItem.module.scss";
+import classes from "./Todo.module.scss";
 
 function getStateFromProps(props) {
   return {
@@ -11,7 +11,7 @@ function getStateFromProps(props) {
   };
 }
 
-class TodoListItem extends Component {
+class Todo extends Component {
 
   state = getStateFromProps(this.props);
 
@@ -24,9 +24,9 @@ class TodoListItem extends Component {
 
   render() {
     return (
-      <div className={classes.TodoListItem}>
+      <div className={classes.Todo}>
         <Checkbox value={this.state.isEnabled} onChange={this.onChange} size={24}/>
-        <span className={classes.TodoListItem__Text}>
+        <span className={classes.Todo__Text}>
           {this.props.text}
         </span>
       </div>
@@ -41,4 +41,4 @@ class TodoListItem extends Component {
   };
 }
 
-export default TodoListItem;
+export default Todo;

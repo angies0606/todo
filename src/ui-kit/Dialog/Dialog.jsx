@@ -22,6 +22,7 @@ function getStateFromProps(props) {
  * - body: jsx
  * - cancelText: string
  * - confirmText: string
+ * - disableConfirm: boolean
  * - onClose: () => void
  * - onConfirm: (result) => void
  */
@@ -50,7 +51,11 @@ class Dialog extends React.Component {
           <Button variant="secondary" onClick={this.handleClose}>
             {this.props.cancelText || 'Cancel'}
           </Button>
-          <Button variant="primary" onClick={this.handleConfirm}>
+          <Button
+            variant="primary"
+            onClick={this.handleConfirm}
+            disabled={this.props.disableConfirm}
+          >
             {this.props.confirmText || 'Ok'}
           </Button>
         </ModalFooter>
