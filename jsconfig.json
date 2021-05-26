@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "checkJs": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@components/*": ["./components/*"],
+      "@features/*": ["./features/*"],
+      "@ui-kit/*": ["./ui-kit/*"],
+      "@dialogs/*": ["./dialogs/*"],
+      "@store/*": ["./store/*"]
+    }
+  }
+}

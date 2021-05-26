@@ -1,5 +1,7 @@
 import Card from 'react-bootstrap/Card';
-import TodoListItem from '@components/TodoListItem/TodoListItem';
+import Todo from '@features/todo-list/Todo/Todo';
+import AddTodo from '@features/todo-list/AddTodo/AddTodo';
+import Spacer from '@ui-kit/Spacer/Spacer';
 import classes from './TodoList.module.scss';
 
 function TodoList() {
@@ -13,9 +15,15 @@ function TodoList() {
           Todo List Description
         </Card.Subtitle>
 
-        <TodoListItem text="asdfgqewg" />
-        <TodoListItem text="qwertyu" isEnabled={true}/>
-        <TodoListItem text="zxcvbnm" />
+        <Spacer />
+
+        <AddTodo />
+
+        <Spacer />
+
+        <Todo text="asdfgqewg" />
+        <Todo text="qwertyu" isEnabled={true}/>
+        <Todo text="zxcvbnm" />
       </Card.Body>
     </Card>
   );
