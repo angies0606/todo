@@ -16,15 +16,18 @@ const initialState = {
     todos: {
       todo1: {
         id: 'todo1',
-        title: 'todo 111111111'
+        title: 'todo 111111111',
+        isChecked: false
       },
       todo2: {
         id: 'todo2',
-        title: 'todo 2222222'
+        title: 'todo 2222222',
+        isChecked: false
       },
       todo3: {
         id: 'todo3',
-        title: 'todo 333333333'
+        title: 'todo 333333333',
+        isChecked: false
       }
     }
   }

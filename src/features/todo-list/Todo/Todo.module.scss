@@ -3,9 +3,14 @@
   width: 100%;
   padding: 10px 20px;
   display: flex;
+  align-items: center;
 
   &__Text {
     margin-left: 10px;
     flex: 1 0 auto;
+  }
+
+  &:hover{
+    background-color: #d2e4ff;
   }
 }

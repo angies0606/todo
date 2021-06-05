@@ -1,6 +1,6 @@
 import Navbar from '@components/Navbar/Navbar';
 import SidebarContainer from '@components/SidebarContainer/SidebarContainer';
-import TodoList from '@features/todo-list/TodoList/TodoList';
+import TodoListCard from '@features/todo-list/TodoListCard/TodoListCard';
 import classes from './App.module.scss';
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <div className={classes.App}>
       <Navbar className={classes.Navbar}/>
       <SidebarContainer className={classes.SidebarContainer}>
-        <TodoList />
+        <TodoListCard />
       </SidebarContainer>
     </div>
   );

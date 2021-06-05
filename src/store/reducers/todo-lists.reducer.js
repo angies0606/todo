@@ -11,6 +11,7 @@ function reducer(state = initialState.todoLists, action) {
         action.data.id
       ];
     }
+    
     default:
       return state;
   }

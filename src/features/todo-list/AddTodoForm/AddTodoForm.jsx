@@ -2,12 +2,12 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Spacer from '@ui-kit/Spacer/Spacer';
-import classes from './AddTodo.module.scss';
+import classes from './AddTodoForm.module.scss';
 
-class AddTodo extends React.PureComponent {
+class AddTodoForm extends React.PureComponent {
   state = {
     title: {
-      value: null,
+      value: '',
       isValid: false
     }
   }
@@ -19,6 +19,7 @@ class AddTodo extends React.PureComponent {
           <Form.Control
             autoComplete="off"
             placeholder="What needs to be done?"
+            value={this.state.title.value}
             onChange={this.onTitleChange}
           />
         </Form.Group>
@@ -49,8 +50,17 @@ class AddTodo extends React.PureComponent {
   }
 
   addTodo = () => {
-
+    this.props.addTodo({
+      title: this.state.title.value
+    });
+    this.setState({
+      title: {
+        value: '',
+        isValid: false
+      }
+    });
   }
+  
 }
 
-export default AddTodo;
+export default AddTodoForm;
