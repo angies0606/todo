@@ -16,6 +16,7 @@ class TodosCollection extends React.Component {
             this.props.checkTodo(todo.id, isChecked);
           }}
           deleteTodo={() => this.props.deleteTodo(todo.id)}
+          editTodo={title => this.props.editTodo(title, todo.id)}
         />
       })
     );

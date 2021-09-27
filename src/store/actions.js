@@ -37,3 +37,33 @@ export function deleteTodoActionCreator(todoId, todoListId) {
     }
   }
 }
+export const DELETE_TODO_LIST = 'DELETE_TODO_LIST';
+export function deleteTodoListActionCreator(todoListId) {
+  return {
+    type: DELETE_TODO_LIST,
+    data: {
+      todoListId
+    }
+  }
+}
+export const EDIT_TODO = 'EDIT_TODO'
+export function editTodoActionCreator(title, todoId) {
+  return {
+    type: EDIT_TODO,
+    data: {
+      title,
+      todoId
+    }
+  }
+}
+
+export const EDIT_TODO_LIST = 'EDIT_TODO_LIST';
+export function editTodoListActionCreator(todoListData, todoListId) {
+  return {
+    type: EDIT_TODO_LIST,
+    data: {
+      todoListData,
+      todoListId
+    }
+  }
+}

@@ -7,24 +7,35 @@ function getStateFromProps(props, state) {
   return {
     ...state,
     show: props.show,
+    title: {
+      value: props.todoList?.title || '',
+      isValid: isTitleValid(props.todoList?.title)
+    },
+    description: {
+      value: props.todoList?.description || ''
+    },
     prevProps: {
       show: props.show
     }
   };
 }
 
-class AddTodoListDialog extends React.Component {
+function isTitleValid (value) {
+  return value?.length >= 3;
+}
+
+class TodoListDialog extends React.Component {
   state = {
     show: false,
     prevProps: {
       show: false
     },
     title: {
-      value: null,
+      value: '',
       isValid: false
     },
     description: {
-      value: null
+      value: ''
     }
   };
 
@@ -47,7 +58,7 @@ class AddTodoListDialog extends React.Component {
     return (
       <Dialog
         show={this.props.show}
-        title='Add new list'
+        title={this.props.title}
         body={
           <Form as="div">
             <Form.Group controlId="title">
@@ -56,6 +67,7 @@ class AddTodoListDialog extends React.Component {
                 autoComplete="off"
                 placeholder="Enter title (3+ symbols)"
                 onChange={this.onTitleChange}
+                value={this.state.title.value}
               />
             </Form.Group>
 
@@ -69,11 +81,12 @@ class AddTodoListDialog extends React.Component {
                 rows={3}
                 placeholder="Enter description"
                 onChange={this.onDescriptionChange}
+                value={this.state.description.value}
               />
             </Form.Group>
           </Form>
         }
-        confirmText='Add'
+        confirmText={this.props.confirmText}
         disableConfirm={!this.isFormValid()}
         onClose={this.onClose}
         onConfirm={this.onConfirm}
@@ -83,7 +96,7 @@ class AddTodoListDialog extends React.Component {
 
   onTitleChange = (e) => {
     const value = e.target.value;
-    const isValid = value?.length >= 3;
+    const isValid = isTitleValid(value);
     this.setState({
       ...this.state,
       title: {
@@ -106,11 +119,11 @@ class AddTodoListDialog extends React.Component {
     this.setState({
       ...this.state,
       title: {
-        value: null,
+        value: '',
         isValid: false
       },
       description: {
-        value: null
+        value: ''
       }
     });
   }
@@ -133,4 +146,4 @@ class AddTodoListDialog extends React.Component {
   }
 }
 
-export default AddTodoListDialog;
+export default TodoListDialog;

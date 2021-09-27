@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {checkTodoActionCreator, deleteTodoActionCreator} from '@store/actions';
+import {checkTodoActionCreator, deleteTodoActionCreator, editTodoActionCreator} from '@store/actions';
 import TodosCollection from './TodosCollection';
 
 const mapStateToProps = (state, ownProps) => {
@@ -19,6 +19,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     deleteTodo: todoId => {
       dispatch(deleteTodoActionCreator(todoId, todoListId));
+    },
+    editTodo: (title, todoId) => {
+      dispatch(editTodoActionCreator(title, todoId));
     }
   };
 };

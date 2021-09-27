@@ -2,7 +2,9 @@ import initialState from '@store/initial-state';
 import {
   ADD_TODO_LIST,
   ADD_TODO,
-  DELETE_TODO
+  DELETE_TODO,
+  DELETE_TODO_LIST,
+  EDIT_TODO_LIST
 } from '@store/actions';
 
 function reducer(state = initialState.entities.todoLists, action) {
@@ -37,6 +39,24 @@ function reducer(state = initialState.entities.todoLists, action) {
         }
       };
     }
+    case DELETE_TODO_LIST: {
+      const {todoListId} = action.data;
+      const newState = {...state};
+      delete newState[todoListId];
+      return newState;
+    }
+    case EDIT_TODO_LIST: {
+      const {todoListData, todoListId} = action.data;
+      return {
+        ...state,
+        [todoListId]: {
+          ...state[todoListId],
+          title: todoListData.title,
+          description: todoListData.description
+        }
+      }
+    }
+    
     default:
       return state;
   }

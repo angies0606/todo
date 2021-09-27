@@ -14,13 +14,14 @@ class AddTodoForm extends React.PureComponent {
 
   render() {
     return (
-      <Form className={classes.AddTodo__Form}>
+      <Form className={classes.AddTodo__Form} as="div">
         <Form.Group controlId="title" className={classes.AddTodo__TitleField}>
           <Form.Control
             autoComplete="off"
             placeholder="What needs to be done?"
             value={this.state.title.value}
             onChange={this.onTitleChange}
+            onKeyPress={this.onKeyPress}
           />
         </Form.Group>
 
@@ -28,7 +29,7 @@ class AddTodoForm extends React.PureComponent {
 
         <Button
           variant="primary"
-          disabled={!this.state.title.isValid}
+          disabled={this.isDisabled()}
           onClick={this.addTodo}
         >
           Add Todo
@@ -49,7 +50,17 @@ class AddTodoForm extends React.PureComponent {
     });
   }
 
+  onKeyPress = e => {
+    if (e.which === 13) {
+      this.addTodo();
+    }
+  }
+
   addTodo = () => {
+    if (this.isDisabled()) {
+      return;
+    }
+
     this.props.addTodo({
       title: this.state.title.value
     });
@@ -60,7 +71,10 @@ class AddTodoForm extends React.PureComponent {
       }
     });
   }
-  
+
+  isDisabled() {
+    return !this.state.title.isValid;
+  }
 }
 
 export default AddTodoForm;

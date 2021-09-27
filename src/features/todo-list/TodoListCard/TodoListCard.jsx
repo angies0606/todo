@@ -1,27 +1,31 @@
 import Card from 'react-bootstrap/Card';
 import Spacer from '@ui-kit/Spacer/Spacer';
 import AddTodoFormConnected from '@features/todo-list/AddTodoForm/AddTodoForm.connected';
+import { Redirect } from 'react-router-dom';
 import TodosCollectionConnected from '@features/todo-list/TodosCollection/TodosCollection.connected';
 import classes from './TodoListCard.module.scss';
 
-function TodoListCard() {
+function TodoListCard({todoList}) {
+  if(!todoList) {
+    return <Redirect to='/'/>;
+  }
   return (
     <Card className={classes.Card}>
       <Card.Body>
         <Card.Title>
-          Todo List Title
+          {todoList.title}
         </Card.Title>
         <Card.Subtitle className="mb-2 text-muted">
-          Todo List Description
+          {todoList.description}
         </Card.Subtitle>
 
         <Spacer />
 
-        <AddTodoFormConnected todoListId='todoList2' />
+        <AddTodoFormConnected todoListId={todoList.id} />
 
         <Spacer />
 
-        <TodosCollectionConnected todoListId='todoList2' />
+        <TodosCollectionConnected todoListId={todoList.id} />
 
         <Spacer />
 

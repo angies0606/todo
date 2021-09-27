@@ -1,22 +1,18 @@
-import classes from './CloseButton.module.scss';
-import {XCircle} from 'react-bootstrap-icons';
+import classes from './Button.module.scss';
 import React from 'react';
 
 
-class CloseButton extends React.Component {
+class Button extends React.Component {
   render() {
     return (
       <>
         <button
-          className={classes.CloseButton}
+          className={classes.Button}
           // onMouseEnter={this.onMouseEnter}
           // onMouseLeave={this.onMouseLeave}
           onClick={() => this.props.onClick()}
         >
-          <XCircle
-            className={classes.CloseButton__icon}
-            size={30}
-          />
+        <this.props.icon size={30} />
         </button>
       </>
     )
@@ -45,4 +41,4 @@ class CloseButton extends React.Component {
   // }
 }
 
-export default CloseButton;
+export default Button;

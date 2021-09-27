@@ -5,11 +5,13 @@ const initialState = {
       todoList1: {
         id: 'todoList1',
         title: 'List 111111',
+        description: 'tl1 description',
         todos: ['todo1', 'todo3']
       },
       todoList2: {
         id: 'todoList2',
         title: 'List 222222',
+        description: 'tl2 description',
         todos: ['todo2']
       }
     },

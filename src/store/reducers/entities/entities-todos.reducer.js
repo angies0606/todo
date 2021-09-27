@@ -1,4 +1,4 @@
-import { ADD_TODO, CHECK_TODO, DELETE_TODO } from '@store/actions';
+import { ADD_TODO, CHECK_TODO, DELETE_TODO, EDIT_TODO } from '@store/actions';
 import initialState from '@store/initial-state';
 
 function reducer(state = initialState.entities.todos, action) {
@@ -26,6 +26,16 @@ function reducer(state = initialState.entities.todos, action) {
       const newState = {...state};
       delete newState[todoId];
       return newState;
+    }
+    case EDIT_TODO: {
+      const {title, todoId} = action.data;
+      return {
+        ...state,
+        [todoId]: {
+          ...state[todoId],
+          title
+        }
+      };
     }
     default:
       return state;
