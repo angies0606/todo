@@ -1,0 +1,13 @@
+.App {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.Navbar {
+  flex: 0 0 auto;
+}
+
+.SidebarContainer {
+  flex: 1 0 auto;
+}
