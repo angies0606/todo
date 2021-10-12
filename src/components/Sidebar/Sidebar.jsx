@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import {ThreeDotsVertical} from 'react-bootstrap-icons';
@@ -8,10 +9,19 @@ import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
 
 
 class Sidebar extends React.Component {
-
   state = {
     editedTodoList: null
   };
+
+  componentDidMount() {
+    fetch('http://localhost:8000/todo-lists')
+      .then(response => {
+        return response.json();
+      })
+      .then(todoLists => {
+        this.props.addTodoLists(todoLists);
+      });
+  }
 
   render() {
     return (
@@ -44,16 +54,14 @@ class Sidebar extends React.Component {
             )
           }
         </Nav>
-        {this.props.todoLists.map(todoList =>
         <TodoListDialog
           show={Boolean(this.state.editedTodoList)}
           onClose={this.onEditTodoListDialogClose}
-          onConfirm={data => this.editConfirmed(data, todoList.id)}
+          onConfirm={data => this.editConfirmed(data, this.state.editedTodoList.id)}
           title={'Edit list'}
           confirmText={'Edit'}
           todoList={this.state.editedTodoList}
         />
-        )}
       </>
     )
   }

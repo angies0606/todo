@@ -1,6 +1,7 @@
 import initialState from '@store/initial-state';
 import {
   ADD_TODO_LIST,
+  ADD_TODO_LISTS,
   ADD_TODO,
   DELETE_TODO,
   DELETE_TODO_LIST,
@@ -14,6 +15,15 @@ function reducer(state = initialState.entities.todoLists, action) {
         ...state,
         [action.data.id]: action.data
       };
+    }
+    case ADD_TODO_LISTS: {
+      const newState = {
+        ...state
+      };
+      action.data.forEach(todoList => {
+        newState[todoList.id] = todoList;
+      });
+      return newState;
     }
     case ADD_TODO: {
       return {

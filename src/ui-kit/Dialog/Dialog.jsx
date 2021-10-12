@@ -6,15 +6,6 @@ import ModalTitle from 'react-bootstrap/ModalTitle';
 import ModalBody from 'react-bootstrap/ModalBody';
 import ModalFooter from 'react-bootstrap/ModalFooter';
 
-function getStateFromProps(props) {
-  return {
-    show: props.show,
-    prevProps: {
-      show: props.show
-    }
-  };
-}
-
 /**
  * Props:
  * - show: boolean
@@ -26,58 +17,48 @@ function getStateFromProps(props) {
  * - onClose: () => void
  * - onConfirm: (result) => void
  */
-class Dialog extends React.Component {
-  state = getStateFromProps(this.props);
+function Dialog({
+  onClose,
+  onConfirm,
+  show,
+  title,
+  body,
+  cancelText = 'Cancel',
+  confirmText = 'Ok',
+  disableConfirm
+}) {
+  const handleClose = () => {
+    onClose();
+  };
 
-  static getDerivedStateFromProps(props, state) {
-    if (state.prevProps.show !== props.show) {
-      return getStateFromProps(props);
-    }
-    return null;
-  }
+  const handleConfirm = () => {
+    onConfirm();
+  };
 
-  render() {
-    return (
-      <Modal show={this.state.show} onHide={this.handleClose}>
-        <ModalHeader closeButton={true}>
-          <ModalTitle>
-            {this.props.title}
-          </ModalTitle>
-        </ModalHeader>
-        <ModalBody>
-          {this.props.body}
-        </ModalBody>
-        <ModalFooter>
-          <Button variant="secondary" onClick={this.handleClose}>
-            {this.props.cancelText || 'Cancel'}
-          </Button>
-          <Button
-            variant="primary"
-            onClick={this.handleConfirm}
-            disabled={this.props.disableConfirm}
-          >
-            {this.props.confirmText || 'Ok'}
-          </Button>
-        </ModalFooter>
-      </Modal>
-    );
-  }
-
-  handleClose = () => {
-    this.setState({
-      show: false
-    });
-
-    this.props.onClose();
-  }
-
-  handleConfirm = () => {
-    this.setState({
-      show: false
-    });
-
-    this.props.onConfirm();
-  }
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <ModalHeader closeButton={true}>
+        <ModalTitle>
+          {title}
+        </ModalTitle>
+      </ModalHeader>
+      <ModalBody>
+        {body}
+      </ModalBody>
+      <ModalFooter>
+        <Button variant="secondary" onClick={handleClose}>
+          {cancelText}
+        </Button>
+        <Button
+          variant="primary"
+          onClick={handleConfirm}
+          disabled={disableConfirm}
+        >
+          {confirmText}
+        </Button>
+      </ModalFooter>
+    </Modal>
+  );
 }
 
 export default Dialog;

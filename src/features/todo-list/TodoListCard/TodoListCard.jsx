@@ -4,11 +4,27 @@ import AddTodoFormConnected from '@features/todo-list/AddTodoForm/AddTodoForm.co
 import { Redirect } from 'react-router-dom';
 import TodosCollectionConnected from '@features/todo-list/TodosCollection/TodosCollection.connected';
 import classes from './TodoListCard.module.scss';
+import { useEffect } from 'react';
+import { propTypes } from 'react-bootstrap/esm/Image';
 
-function TodoListCard({todoList}) {
+function TodoListCard({todoList, addTodos}) {
+  useEffect(() => {
+    if(!todoList) {
+      return;
+    }
+    fetch('http//:localhost:8000/todo-lists/' + todoList.id + '/todos?todoListId=' + todoList.id).then(
+      (result) => {
+        return result.json();
+      }
+    ).then((todos) => {
+      addTodos(todos);
+    })
+  }, [todoList])
+
   if(!todoList) {
     return <Redirect to='/'/>;
   }
+ 
   return (
     <Card className={classes.Card}>
       <Card.Body>

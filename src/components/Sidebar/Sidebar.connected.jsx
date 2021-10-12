@@ -1,4 +1,8 @@
-import { deleteTodoListActionCreator, editTodoListActionCreator} from '@store/actions';
+import {
+  deleteTodoListActionCreator,
+  editTodoListActionCreator,
+  addTodoListsActionCreator
+} from '@store/actions';
 // import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import Sidebar from './Sidebar';
@@ -18,6 +22,9 @@ const mapDispatchToProps = (dispatch) => {
       // if (isRedirectToHome) {
       //   dispatch(push('/'));
       // }
+    },
+    addTodoLists: todoLists => {
+      dispatch(addTodoListsActionCreator(todoLists))
     }
   };
 };

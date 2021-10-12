@@ -7,7 +7,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     todos: state.entities.todoLists[todoListId].todos.map(todoId => {
       return state.entities.todos[todoId]
-    })
+    }).filter(todo => todo !== undefined)
   };
 };
 

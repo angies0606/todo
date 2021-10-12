@@ -1,3 +1,19 @@
+export const ADD_TODO_LISTS = 'ADD_TODO_LISTS';
+export function addTodoListsActionCreator(todoLists) {
+  return {
+    type: ADD_TODO_LISTS,
+    data: todoLists
+  };
+}
+
+export const ADD_TODOS = 'ADD_TODOS';
+export function addTodosActionCreator(todos) {
+  return {
+    type: ADD_TODOS,
+    data: todos
+  }
+}
+
 export const ADD_TODO_LIST = 'ADD_TODO_LIST';
 export function addTodoListActionCreator(todoList) {
   return {

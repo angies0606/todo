@@ -1,6 +1,7 @@
 import initialState from '@store/initial-state';
 import {
   ADD_TODO_LIST,
+  ADD_TODO_LISTS,
   DELETE_TODO_LIST
 } from '@store/actions';
 
@@ -11,6 +12,13 @@ function reducer(state = initialState.todoLists, action) {
         ...state,
         action.data.id
       ];
+    }
+
+    case ADD_TODO_LISTS: {
+      return [
+        ...state,
+        ...action.data.map(todoList => todoList.id).filter(todoListId => !state.includes(todoListId))
+      ]
     }
 
     case DELETE_TODO_LIST: {

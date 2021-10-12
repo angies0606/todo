@@ -9,6 +9,7 @@ import SidebarContainer from '@components/SidebarContainer/SidebarContainer';
 import TodoListCardConnected from '@features/todo-list/TodoListCard/TodoListCard.connected';
 import classes from './App.module.scss';
 import history from '../../history';
+import { useEffect } from "react";
 
 function App() {
   return (
