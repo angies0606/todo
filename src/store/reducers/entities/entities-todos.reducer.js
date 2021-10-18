@@ -11,7 +11,7 @@ function reducer(state = initialState.entities.todos, action) {
     case ADD_TODO: {
       return {
         ...state,
-        [action.data.todo.id]: action.data.todo
+        [action.data.id]: action.data
       };
     }
     case ADD_TODOS: {

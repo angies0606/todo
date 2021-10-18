@@ -32,7 +32,7 @@ function reducer(state = initialState.entities.todoLists, action) {
           ...state[action.data.todoListId],
           todos: [
             ...state[action.data.todoListId].todos,
-            action.data.todo.id
+            action.data.id
           ]
         }
       };

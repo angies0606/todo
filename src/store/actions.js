@@ -23,13 +23,11 @@ export function addTodoListActionCreator(todoList) {
 }
 
 export const ADD_TODO = 'ADD_TODO';
-export function addTodoActionCreator(todo, todoListId) {
+export function addTodoActionCreator(todoData) {
   return {
     type: ADD_TODO,
-    data: {
-      todo,
-      todoListId
-    }
+    data: todoData
+    
   }
 }
 

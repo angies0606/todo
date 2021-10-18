@@ -14,7 +14,9 @@ function TodoListDialog(props) {
   });
   const [description, setDescription] = useState({
     value: ''
-  })
+  });
+  const [isProgress, setIsProgress] = useState(false);
+
 
   useEffect(() => {
     if (props.todoList) {
@@ -27,6 +29,23 @@ function TodoListDialog(props) {
       });
     }
   }, [props.todoList]);
+
+  const onConfirmTodoList = () => {
+    setIsProgress(true);
+
+    const newTodoList = {
+      title: title.value,
+      description: description.value,
+      todos: []
+    }
+    props.onConfirm(newTodoList)
+      .then(() => {
+        // resetFormState();
+      })
+      .finally(() => {
+        setIsProgress(false);
+      });  
+  }
 
   const onTitleChange = e => {
     setTitle({
@@ -41,27 +60,19 @@ function TodoListDialog(props) {
     });
   };
 
-  const resetFormState = () => {
-    setTitle({
-      value: '',
-      isValid: false
-    });
-    setDescription({
-      value: ''
-    });
-  }
+  // const resetFormState = () => {
+  //   setTitle({
+  //     value: '',
+  //     isValid: false
+  //   });
+  //   setDescription({
+  //     value: ''
+  //   });
+  // }
 
   const onClose = () => {
     props.onClose();
-    resetFormState();
-  }
-
-  const onConfirm = () => {
-    props.onConfirm({
-      title: title.value,
-      description: description.value
-    });
-    resetFormState();
+    // resetFormState();
   }
 
   const isFormValid = () => {
@@ -97,12 +108,13 @@ function TodoListDialog(props) {
               value={description.value}
             />
           </Form.Group>
-        </Form>
+          {isProgress && <div>Working...</div>}
+        </Form> 
       }
       confirmText={props.confirmText}
-      disableConfirm={!isFormValid()}
+      disableConfirm={!isFormValid() || isProgress}
       onClose={onClose}
-      onConfirm={onConfirm}
+      onConfirm={onConfirmTodoList}
     />
   );
 }

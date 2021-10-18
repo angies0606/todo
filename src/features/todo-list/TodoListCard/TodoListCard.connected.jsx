@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import TodoListCard from './TodoListCard';
-import { addTodosActionCreator } from '@store/actions';
+import { addTodosActionCreator,addTodoActionCreator } from '@store/actions';
 
 const mapStateToProps = (state, ownProps) => {
   const {todoListId} = ownProps;
@@ -12,6 +12,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addTodos: todos => {
       dispatch(addTodosActionCreator(todos));
+    },
+     addTodo: todoData => {
+      dispatch(addTodoActionCreator(todoData));
     }
   };
 };

@@ -1,4 +1,4 @@
-import {Component} from 'react'
+import {useState} from 'react'
 import Checkbox from '@ui-kit/Checkbox/Checkbox';
 import classes from "./Todo.module.scss";
 import {BackspaceReverse, Check2Circle, Pen, XCircle} from 'react-bootstrap-icons';
@@ -20,14 +20,21 @@ import Button from '@ui-kit/Button/Button/Button';
  * - todo: object
  * - onCheck: (isChecked: boolean) => void
  */
-class Todo extends Component {
-
+function Todo ({
+  onCheck,
+  todo,
+  editTodo,
+  deleteTodo
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editText, setEditText] = useState('');
   // state = getStateFromProps(this.props);
-  state = {
-    isHovered: false,
-    isEditMode: false,
-    editText: ''
-  }
+  // state = {
+  //   isHovered: false,
+  //   isEditMode: false,
+  //   editText: ''
+  // }
 
   // static getDerivedStateFromProps(props, state) {
   //   if (state.prevProps?.isEnabled !== props.isEnabled) {
@@ -35,135 +42,112 @@ class Todo extends Component {
   //   }
   //   return null;
   // }
-
-  render() {
-    const todoClasses = [classes.Todo];
-    if(this.state.isEditMode) {
-      todoClasses.push(classes['Todo--edit']);
-    }
-
-    return (
-      <div
-        className={todoClasses.join(' ')}
-        onMouseEnter={this.onEnter}
-        onMouseLeave={this.onLeave}
-      >
-        <Checkbox value={this.props.todo.isChecked} onChange={this.onChange} size={24}/>
-        <span className={classes.Todo__Text}>
-          {this.state.isEditMode
-            ? <Form.Control
-                autoFocus={true}
-                size="sm"
-                type="text"
-                value={this.state.editText}
-                onChange={this.onTodoTextChange}
-                onKeyPress={this.onKeyPress}
-                onKeyUp={this.onKeyUp}
-                // onBlur={this.onBlur}
-              />
-            : this.props.todo.title
-          }
-        </span>
-        {this.state.isHovered && !this.state.isEditMode
-          ? <>
-              <Button 
-                icon={Pen}
-                onClick={this.onEditClick} 
-              />
-              <Button
-                icon={XCircle}
-                onClick={() => this.props.deleteTodo()} 
-              />
-            </>
-          : null
-        }
-        {this.state.isEditMode
-          ? <>
-              <Button
-                icon={Check2Circle}
-                onClick={this.save}
-              />
-              <Button 
-                icon={BackspaceReverse}          
-                onClick={this.onBackReverse}
-              />
-            </>
-          : null
-        }
-      </div>
-    );
-  }
-
-  onChange = isChecked => {
-    this.props.onCheck(isChecked);
+  const onChange = isChecked => {
+    onCheck(isChecked);
     // this.setState({
     //   ...this.state,
     //   isDone
     // });
   };
 
-  onEnter = () => {
-    this.setState({
-      ...this.state,
-      isHovered: true
-    })
+ const onEnter = () => {
+    setIsHovered(true);
   }
 
-  onLeave = () => {
-    this.setState({
-      ...this.state,
-      isHovered: false
-    })
+  const onLeave = () => {
+    setIsHovered(false);
   }
 
-  onEditClick = () => {
-    this.setState({
-      ...this.state,
-      isEditMode: true,
-      editText: this.props.todo.title
-    })
+  const onEditClick = () => {
+    setIsEditMode(true);
+    setEditText(todo.title);
   }
 
-  onTodoTextChange = e => {
-    this.setState({
-      ...this.state,
-      editText: e.target.value
-    });
+  const onTodoTextChange = e => {
+    setEditText(e.target.value);
   }
 
-  onKeyPress = e => {
-    switch (e.which) {
-      case 13:
-        this.save();
-        break;
+  const onKeyPress = e => {
+    if (e.which === 13) {
+      save();
     }
   }
 
-  onKeyUp = e => {
-    switch (e.which) {
-      case 27:
-        this.stopEditing();
-        break;
+  const onKeyUp = e => {
+    if (e.which === 27) {
+     stopEditing();
     }
   }
 
-  onBackReverse = () => {
-    this.stopEditing();
+  const onBackReverse = () => {
+    stopEditing();
   }
 
-  save = () => {
-    this.stopEditing();
-    this.props.editTodo(this.state.editText);
+  const save = () => {
+    stopEditing();
+    editTodo(editText);
   }
 
-  stopEditing = () => {
-    this.setState({
-      ...this.state,
-      isEditMode: false,
-      editText: ''
-    });
+  const stopEditing = () => {
+    setIsEditMode(false);
+    setEditText('');
   }
-}
+  const todoClasses = [classes.Todo];
+  if(isEditMode) {
+    todoClasses.push(classes['Todo--edit']);
+  }
+
+  return (
+    <div
+      className={todoClasses.join(' ')}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+    >
+      <Checkbox value={todo.isChecked} onChange={onChange} size={24}/>
+      <span className={classes.Todo__Text}>
+        {isEditMode
+          ? <Form.Control
+              autoFocus={true}
+              size="sm"
+              type="text"
+              value={editText}
+              onChange={onTodoTextChange}
+              onKeyPress={onKeyPress}
+              onKeyUp={onKeyUp}
+              // onBlur={onBlur}
+            />
+          : todo.title
+        }
+      </span>
+      {isHovered && !isEditMode
+        ? <>
+            <Button 
+              Icon={Pen}
+              onClick={onEditClick} 
+            />
+            <Button
+              Icon={XCircle}
+              onClick={() => deleteTodo()} 
+            />
+          </>
+        : null
+      }
+      {isEditMode
+        ? <>
+            <Button
+              Icon={Check2Circle}
+              onClick={save}
+            />
+            <Button 
+              Icon={BackspaceReverse}          
+              onClick={onBackReverse}
+            />
+          </>
+        : null
+      }
+    </div>
+  );
+} 
 
 export default Todo;
 

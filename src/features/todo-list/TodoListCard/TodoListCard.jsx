@@ -5,24 +5,62 @@ import { Redirect } from 'react-router-dom';
 import TodosCollectionConnected from '@features/todo-list/TodosCollection/TodosCollection.connected';
 import classes from './TodoListCard.module.scss';
 import { useEffect } from 'react';
-import { propTypes } from 'react-bootstrap/esm/Image';
+// import { propTypes } from 'react-bootstrap/esm/Image';
 
-function TodoListCard({todoList, addTodos}) {
+function TodoListCard({
+  todoList, 
+  addTodos,
+  addTodo
+  }) {
   useEffect(() => {
     if(!todoList) {
       return;
     }
-    fetch('http//:localhost:8000/todo-lists/' + todoList.id + '/todos?todoListId=' + todoList.id).then(
-      (result) => {
-        return result.json();
-      }
-    ).then((todos) => {
-      addTodos(todos);
-    })
-  }, [todoList])
+    fetch('http://localhost:8000/todo-lists/' + todoList.id + '/todos?todoListId=' + todoList.id)
+      .then(result => result.json())
+      .then(todos => {
+        addTodos(todos);
+      })
+  }, [todoList?.id])
 
   if(!todoList) {
     return <Redirect to='/'/>;
+  }
+
+  function onAddTodo(newTodo) {
+    const payload = {
+      ...newTodo,
+      todoListId: todoList.id
+    };
+
+    return fetch('http://localhost:8000/todos', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+    })
+      .then(response => response.json())
+      .then(result => {
+        return fetch('http://localhost:8000/todo-lists/' + todoList.id, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            todos: [
+              ...todoList.todos,
+              result.id
+            ]
+          }),
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          }
+        }).then(() => result)
+      })
+      .then(result => {
+        addTodo(result);
+      })
+      .catch((e) =>
+        console.log(e)
+      )
   }
  
   return (
@@ -37,7 +75,10 @@ function TodoListCard({todoList, addTodos}) {
 
         <Spacer />
 
-        <AddTodoFormConnected todoListId={todoList.id} />
+        <AddTodoFormConnected
+          todoListId={todoList.id}
+          onAddTodo={onAddTodo}
+        />
 
         <Spacer />
 
