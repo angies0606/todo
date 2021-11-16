@@ -3,9 +3,31 @@
   width: 100%;
   padding: 10px 20px;
   display: flex;
+  align-items: center;
 
-  &__Text {
-    margin-left: 10px;
-    flex: 1 0 auto;
+  &:hover{
+    background-color: #d2e4ff;
   }
+}
+
+.Todo__Text {
+  margin-left: 10px;
+  flex: 1 0 auto;
+}
+
+.Todo--edit {
+  background-color: #d2e4ff;
+}
+
+.Todo__Button {
+  height: 20px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background-color: #d2e4ff;
+  outline: none;
+  margin: 8px;
+  cursor: pointer;
 }

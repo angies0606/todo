@@ -7,6 +7,7 @@ const mapDispatchToProps = (dispatch) => {
     addTodoList: (todoListData) => {
       // имитация данных с бэка
       todoListData.id = Date.now().toString();
+      todoListData.todos = [];
       dispatch(addTodoListActionCreator(todoListData));
     }
   }

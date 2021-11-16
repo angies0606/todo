@@ -2,24 +2,26 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Spacer from '@ui-kit/Spacer/Spacer';
-import classes from './AddTodo.module.scss';
+import classes from './AddTodoForm.module.scss';
 
-class AddTodo extends React.PureComponent {
+class AddTodoForm extends React.PureComponent {
   state = {
     title: {
-      value: null,
+      value: '',
       isValid: false
     }
   }
 
   render() {
     return (
-      <Form className={classes.AddTodo__Form}>
+      <Form className={classes.AddTodo__Form} as="div">
         <Form.Group controlId="title" className={classes.AddTodo__TitleField}>
           <Form.Control
             autoComplete="off"
             placeholder="What needs to be done?"
+            value={this.state.title.value}
             onChange={this.onTitleChange}
+            onKeyPress={this.onKeyPress}
           />
         </Form.Group>
 
@@ -27,7 +29,7 @@ class AddTodo extends React.PureComponent {
 
         <Button
           variant="primary"
-          disabled={!this.state.title.isValid}
+          disabled={this.isDisabled()}
           onClick={this.addTodo}
         >
           Add Todo
@@ -48,9 +50,31 @@ class AddTodo extends React.PureComponent {
     });
   }
 
-  addTodo = () => {
+  onKeyPress = e => {
+    if (e.which === 13) {
+      this.addTodo();
+    }
+  }
 
+  addTodo = () => {
+    if (this.isDisabled()) {
+      return;
+    }
+
+    this.props.addTodo({
+      title: this.state.title.value
+    });
+    this.setState({
+      title: {
+        value: '',
+        isValid: false
+      }
+    });
+  }
+
+  isDisabled() {
+    return !this.state.title.isValid;
   }
 }
 
-export default AddTodo;
+export default AddTodoForm;

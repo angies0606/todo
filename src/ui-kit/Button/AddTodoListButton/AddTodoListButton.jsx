@@ -1,7 +1,7 @@
 import classes from './AddTodoListButton.module.scss';
 import {Plus} from 'react-bootstrap-icons';
 import React from 'react';
-import AddTodoListDialog from '@dialogs/AddTodoListDialog/AddTodoListDialog';
+import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
 
 class AddTodoListButton extends React.Component {
 
@@ -26,10 +26,13 @@ class AddTodoListButton extends React.Component {
           />
         </button>
 
-        <AddTodoListDialog
+        <TodoListDialog
           show={this.state.isAddTodoListDialogVisible}
           onClose={this.onAddTodoListDialogClose}
           onConfirm={this.addTodoList}
+          title={'Add new list'}
+          confirmText={'Add'}
+          
         />
       </>
     )

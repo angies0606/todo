@@ -1,6 +1,7 @@
 import initialState from '@store/initial-state';
 import {
-  ADD_TODO_LIST
+  ADD_TODO_LIST,
+  DELETE_TODO_LIST
 } from '@store/actions';
 
 function reducer(state = initialState.todoLists, action) {
@@ -11,6 +12,14 @@ function reducer(state = initialState.todoLists, action) {
         action.data.id
       ];
     }
+
+    case DELETE_TODO_LIST: {
+      const {todoListId} = action.data;
+      const newState = [...state];
+      newState.splice(newState.indexOf(todoListId), 1);
+      return newState;
+    }
+    
     default:
       return state;
   }
