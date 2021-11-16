@@ -2,6 +2,7 @@ import classes from './AddTodoListButton.module.scss';
 import {Plus} from 'react-bootstrap-icons';
 import {useState} from 'react';
 import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
+import * as api from '@api/api';
 
 function AddTodoListButton ({
   addTodoList
@@ -14,22 +15,18 @@ function AddTodoListButton ({
   // };
   
   const onAddTodoList = (newTodoList) => {
-    return fetch('http://localhost:8000/todo-lists', {
-      method: 'POST',
-      body: JSON.stringify(newTodoList),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
+    return api.addTodoList({
+      ...newTodoList,
+      todos: []
+    }).then((result) => {
+      addTodoList(result);
+      onAddTodoListDialogClose();
     })
-      .then((result) => result.json())
-      .then((result) => {
-        addTodoList(result);
-        onAddTodoListDialogClose();
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+    .catch((e) => {
+      console.log(e)
+    })
   }
+  
   const onAddTodoListDialogClose = () => {
     setIsAddTodoListDialogVisible(false);
   }

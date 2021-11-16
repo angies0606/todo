@@ -1,36 +1,42 @@
 import {useEffect, useState} from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import {ThreeDotsVertical} from 'react-bootstrap-icons';
 import classes from './Sidebar.module.scss';
 import Dropdown from '@ui-kit/Dropdown/Dropdown';
 import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
+import * as api from '@api/api';
 
 
 function Sidebar({
-  addTodoLists,
+  putTodoLists,
+  editTodoList,
   className,
   todoLists,
-  deleteTodoList,
-  editTodoList
+  deleteTodoList
 }) {
   const [editedTodoList, setEditedTodoList] = useState(null);
- 
+
   useEffect(() => {
-    fetch('http://localhost:8000/todo-lists')
-      .then(response => {
-        return response.json();
+    api.getTodoLists().then(todoLists => {
+      putTodoLists(todoLists);
+    });
+  }, [putTodoLists]);
+
+  const onDeleteTodoList = async todoList => {
+    await api.deleteTodoList(todoList)
+
+    deleteTodoList(todoList);
+  };
+
+  const onEditTodoListConfirm = (editedData) => {
+    return api.editTodoList(editedTodoList.id, editedData)
+      .then(result => {
+        editTodoList(result);
+        onEditTodoListDialogClose();
       })
-      .then(todoLists => {
-        addTodoLists(todoLists);
-      });
-  }, [addTodoLists]);
-
-  const deleteTodolist = todoList => {
-    deleteTodoList(todoList.id);
   }
-
-  const editTodolist = todoList => {
+  const todoListIsEdited = todoList => {
     setEditedTodoList(todoList);
   }
 
@@ -38,11 +44,6 @@ function Sidebar({
     setEditedTodoList(null);
   }
 
-  const editConfirmed = (data, todoListId) => {
-    editTodoList(data, todoListId);
-    onEditTodoListDialogClose();
-  }
-  
   return (
     <>
       <Nav defaultActiveKey="/home" className={className + ' flex-column bg-light'}>
@@ -61,11 +62,11 @@ function Sidebar({
                 items={[
                   {
                     title: 'Delete',
-                    onClick: () => deleteTodolist(todoList)
+                    onClick: () => onDeleteTodoList(todoList)
                   },
                   {
                     title: 'Edit',
-                    onClick: () => editTodolist(todoList)
+                    onClick: () => todoListIsEdited(todoList)
                   },
                 ]}
               />
@@ -76,7 +77,7 @@ function Sidebar({
       <TodoListDialog
         show={Boolean(editedTodoList)}
         onClose={onEditTodoListDialogClose}
-        onConfirm={data => editConfirmed(data, editedTodoList.id)}
+        onConfirm={onEditTodoListConfirm}
         title={'Edit list'}
         confirmText={'Edit'}
         todoList={editedTodoList}
@@ -86,4 +87,4 @@ function Sidebar({
   )
 }
 
-export default withRouter(Sidebar);
+export default Sidebar;

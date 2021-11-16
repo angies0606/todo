@@ -5,64 +5,86 @@ import { Redirect } from 'react-router-dom';
 import TodosCollectionConnected from '@features/todo-list/TodosCollection/TodosCollection.connected';
 import classes from './TodoListCard.module.scss';
 import { useEffect } from 'react';
+import * as api from '@api/api'
 // import { propTypes } from 'react-bootstrap/esm/Image';
 
 function TodoListCard({
   todoList, 
   addTodos,
-  addTodo
-  }) {
+  addTodo,
+  deleteTodo,
+  editTodo
+}) {
   useEffect(() => {
     if(!todoList) {
       return;
     }
-    fetch('http://localhost:8000/todo-lists/' + todoList.id + '/todos?todoListId=' + todoList.id)
-      .then(result => result.json())
-      .then(todos => {
-        addTodos(todos);
-      })
-  }, [todoList?.id])
+    api.getTodos(todoList.id).then(todos => {
+      addTodos(todos);
+    });
+  }, [todoList?.id, addTodos]);
 
   if(!todoList) {
     return <Redirect to='/'/>;
   }
 
-  function onAddTodo(newTodo) {
+  const onAddTodo = newTodo =>  {
     const payload = {
       ...newTodo,
       todoListId: todoList.id
     };
 
-    return fetch('http://localhost:8000/todos', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-    })
-      .then(response => response.json())
-      .then(result => {
-        return fetch('http://localhost:8000/todo-lists/' + todoList.id, {
-          method: 'PATCH',
-          body: JSON.stringify({
-            todos: [
-              ...todoList.todos,
-              result.id
-            ]
-          }),
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          }
-        }).then(() => result)
+    return api.addTodo(payload).then(todoResult => {
+      return api.addTodoInTodoList(todoList.id, {
+          todos: [
+            ...todoList.todos,
+            todoResult.id
+          ]
+        }).then((todoListResult) => [todoResult, todoListResult]);
       })
-      .then(result => {
-        addTodo(result);
+      .then(([todoResult, todoListResult]) => {
+        addTodo(todoResult, todoListResult);
       })
       .catch((e) =>
         console.log(e)
-      )
+      );
   }
- 
+
+  const onDeleteTodo = (todoId) => {
+    return api.deleteTodo(todoId).then(() => {
+      return api.deleteTodoInTodoList(todoList.id, {
+        todos: todoList.todos.filter(t => t !== todoId)
+      })
+    })
+    .then(result => {
+      deleteTodo(todoId, result);
+    })
+    .catch((e) =>
+      console.log(e)
+    );
+  }
+  
+  const onEditTodo = (todoData) => {
+    return api.editTodo(todoData.id, {
+      title: todoData.title
+    }).then(result => {
+      editTodo(result);
+    })
+    .catch((e) =>
+      console.log(e)
+    );
+  }
+
+  const onCheckTodo = (todoData) => {
+    return api.checkTodo(todoData.id, {
+      isChecked: todoData.isChecked
+    }).then(result => {
+      editTodo(result);
+    })
+    .catch((e) =>
+      console.log(e)
+    );
+  }
   return (
     <Card className={classes.Card}>
       <Card.Body>
@@ -82,7 +104,12 @@ function TodoListCard({
 
         <Spacer />
 
-        <TodosCollectionConnected todoListId={todoList.id} />
+        <TodosCollectionConnected 
+          todoListId={todoList.id} 
+          onDeleteTodo={onDeleteTodo}
+          onEditTodo={onEditTodo}
+          onCheckTodo={onCheckTodo}
+        />
 
         <Spacer />
 

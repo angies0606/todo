@@ -28,7 +28,8 @@ function Todo ({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [editText, setEditText] = useState('');
+  const [editedText, setEditedText] = useState('');
+  const [isProgress, setIsProgress] = useState(false);
   // state = getStateFromProps(this.props);
   // state = {
   //   isHovered: false,
@@ -43,11 +44,11 @@ function Todo ({
   //   return null;
   // }
   const onChange = isChecked => {
-    onCheck(isChecked);
-    // this.setState({
-    //   ...this.state,
-    //   isDone
-    // });
+    setIsProgress(true);
+    onCheck({
+      id: todo.id,
+      isChecked: isChecked
+    }).then(() => setIsProgress(false))
   };
 
  const onEnter = () => {
@@ -60,16 +61,16 @@ function Todo ({
 
   const onEditClick = () => {
     setIsEditMode(true);
-    setEditText(todo.title);
+    setEditedText(todo.title);
   }
 
   const onTodoTextChange = e => {
-    setEditText(e.target.value);
+    setEditedText(e.target.value);
   }
 
   const onKeyPress = e => {
     if (e.which === 13) {
-      save();
+      onSaveEditing();
     }
   }
 
@@ -83,14 +84,21 @@ function Todo ({
     stopEditing();
   }
 
-  const save = () => {
-    stopEditing();
-    editTodo(editText);
+  const onSaveEditing = () => {
+    setIsProgress(true);
+    editTodo({
+      title: editedText, 
+      id: todo.id
+    })
+    .then(() => stopEditing())
+    .finally(() => {
+      setIsProgress(false);
+    });  
   }
 
   const stopEditing = () => {
     setIsEditMode(false);
-    setEditText('');
+    setEditedText('');
   }
   const todoClasses = [classes.Todo];
   if(isEditMode) {
@@ -110,7 +118,7 @@ function Todo ({
               autoFocus={true}
               size="sm"
               type="text"
-              value={editText}
+              value={editedText}
               onChange={onTodoTextChange}
               onKeyPress={onKeyPress}
               onKeyUp={onKeyUp}
@@ -136,7 +144,7 @@ function Todo ({
         ? <>
             <Button
               Icon={Check2Circle}
-              onClick={save}
+              onClick={onSaveEditing}
             />
             <Button 
               Icon={BackspaceReverse}          
@@ -145,6 +153,7 @@ function Todo ({
           </>
         : null
       }
+      {isProgress && <div>Working...</div>}
     </div>
   );
 } 

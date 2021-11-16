@@ -6,7 +6,8 @@ module.exports = function override(config) {
     '@features': 'src/features',
     '@ui-kit': 'src/ui-kit',
     '@dialogs': 'src/dialogs',
-    '@store': 'src/store'
+    '@store': 'src/store',
+    '@api': 'src/api'
   })(config);
 
   return config;

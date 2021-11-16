@@ -1,20 +1,20 @@
 import { 
-  ADD_TODO,
-  ADD_TODOS, 
+  PUT_TODOS, 
   CHECK_TODO, 
-  DELETE_TODO, 
-  EDIT_TODO } from '@store/actions';
+  DELETE_TODOS, 
+  EDIT_TODO
+} from '@store/actions';
 import initialState from '@store/initial-state';
 
 function reducer(state = initialState.entities.todos, action) {
   switch (action.type) {
-    case ADD_TODO: {
-      return {
-        ...state,
-        [action.data.id]: action.data
-      };
-    }
-    case ADD_TODOS: {
+    // case ADD_TODO: {
+    //   return {
+    //     ...state,
+    //     [action.data.id]: action.data
+    //   };
+    // }
+    case PUT_TODOS: {
       const newState = {
         ...state
       }
@@ -35,10 +35,11 @@ function reducer(state = initialState.entities.todos, action) {
         }
       };
     }
-    case DELETE_TODO: {
-      const {todoId} = action.data;
+    case DELETE_TODOS: {
       const newState = {...state};
-      delete newState[todoId];
+      action.data.forEach(todoId => {
+        delete newState[todoId];
+      });
       return newState;
     }
     case EDIT_TODO: {

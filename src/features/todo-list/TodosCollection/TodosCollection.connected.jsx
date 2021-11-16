@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {checkTodoActionCreator, deleteTodoActionCreator, editTodoActionCreator} from '@store/actions';
+import {checkTodoActionCreator, editTodoActionCreator} from '@store/actions';
 import TodosCollection from './TodosCollection';
 
 const mapStateToProps = (state, ownProps) => {
@@ -14,15 +14,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   const {todoListId} = ownProps;
   return {
-    checkTodo: (todoId, isChecked) => {
-      dispatch(checkTodoActionCreator(todoId, isChecked));
-    },
-    deleteTodo: todoId => {
-      dispatch(deleteTodoActionCreator(todoId, todoListId));
-    },
-    editTodo: (title, todoId) => {
-      dispatch(editTodoActionCreator(title, todoId));
-    }
+    // checkTodo: (todoId, isChecked) => {
+    //   dispatch(checkTodoActionCreator(todoId, isChecked));
+    // }
+    // editTodo: (title, todoId) => {
+    //   dispatch(editTodoActionCreator(title, todoId));
+    // }
   };
 };
 

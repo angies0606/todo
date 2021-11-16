@@ -33,14 +33,13 @@ function TodoListDialog(props) {
   const onConfirmTodoList = () => {
     setIsProgress(true);
 
-    const newTodoList = {
+    const todoListData = {
       title: title.value,
-      description: description.value,
-      todos: []
+      description: description.value
     }
-    props.onConfirm(newTodoList)
+    props.onConfirm(todoListData)
       .then(() => {
-        // resetFormState();
+        resetFormState();
       })
       .finally(() => {
         setIsProgress(false);
@@ -60,19 +59,19 @@ function TodoListDialog(props) {
     });
   };
 
-  // const resetFormState = () => {
-  //   setTitle({
-  //     value: '',
-  //     isValid: false
-  //   });
-  //   setDescription({
-  //     value: ''
-  //   });
-  // }
+  const resetFormState = () => {
+    setTitle({
+      value: '',
+      isValid: false
+    });
+    setDescription({
+      value: ''
+    });
+  }
 
   const onClose = () => {
     props.onClose();
-    // resetFormState();
+    resetFormState();
   }
 
   const isFormValid = () => {

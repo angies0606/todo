@@ -7,20 +7,18 @@ import Todo from '@features/todo-list/Todo/Todo';
  */
 function TodosCollection ({
   todos,
-  checkTodo,
-  deleteTodo,
-  editTodo
+  onCheckTodo,
+  onDeleteTodo,
+  onEditTodo
 }) {
   return (
     todos.map((todo, index) => {
       return <Todo
         key={index}
         todo={todo}
-        onCheck={isChecked => {
-          checkTodo(todo.id, isChecked);
-        }}
-        deleteTodo={() => deleteTodo(todo.id)}
-        editTodo={title => editTodo(title, todo.id)}
+        onCheck={onCheckTodo}
+        deleteTodo={() => onDeleteTodo(todo.id)}
+        editTodo={onEditTodo}
       />
     })
   );

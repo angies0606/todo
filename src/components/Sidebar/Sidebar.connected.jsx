@@ -1,7 +1,7 @@
 import {
   deleteTodoListActionCreator,
-  editTodoListActionCreator,
-  addTodoListsActionCreator
+  deleteTodosActionCreator,
+  putTodoListsActionCreator
 } from '@store/actions';
 // import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
@@ -14,17 +14,18 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    editTodoList: (data, todoListId) => {
-      dispatch(editTodoListActionCreator(data, todoListId));
+    editTodoList: (todoList) => {
+      dispatch(putTodoListsActionCreator([todoList]));
     },
-    deleteTodoList: (todoListId) => {
-      dispatch(deleteTodoListActionCreator(todoListId));
+    deleteTodoList: (todoList) => {
+      dispatch(deleteTodoListActionCreator(todoList.id));
+      dispatch(deleteTodosActionCreator(todoList.todos));
       // if (isRedirectToHome) {
       //   dispatch(push('/'));
       // }
     },
-    addTodoLists: todoLists => {
-      dispatch(addTodoListsActionCreator(todoLists))
+    putTodoLists: todoLists => {
+      dispatch(putTodoListsActionCreator(todoLists))
     }
   };
 };

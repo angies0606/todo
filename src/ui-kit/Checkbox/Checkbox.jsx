@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import { CheckSquare, Square } from 'react-bootstrap-icons';
 import classes from './Checkbox.module.scss';
 
@@ -8,44 +8,40 @@ import classes from './Checkbox.module.scss';
 //   )
 // }
 
-function getStateFromProps(props) {
-  return {
-    value: props.value,
-    prevProps: {
-      value: props.value
-    }
-  };
+// function getStateFromProps(props) {
+//   return {
+//     value: props.value,
+//     prevProps: {
+//       value: props.value
+//     }
+//   };
+// }
+
+function Checkbox ({
+  value,
+  onChange,
+  size
+}) {
+  // state = getStateFromProps(this.props);
+ 
+  // static getDerivedStateFromProps(props, state) {
+  //   if (state.prevProps?.value !== props.value) {
+  //     return getStateFromProps(props);
+  //   }
+  //   return null
+  // }
+  const onClick = () => {
+    const newValue = !value
+    onChange && onChange(newValue);
+  }
+  return (
+    <span className={classes.Checkbox} onClick={() => onClick()} >
+      {value
+        ? <CheckSquare size={size} />
+        : <Square size={size}/>
+      }
+    </span>
+  );
 }
 
-class CheckboxClass extends Component {
-
-  state = getStateFromProps(this.props);
-
-  static getDerivedStateFromProps(props, state) {
-    if (state.prevProps?.value !== props.value) {
-      return getStateFromProps(props);
-    }
-    return null
-  }
-
-  render() {
-    return (
-      <span className={classes.Checkbox} onClick={() => this.onClick()} >
-        {this.state.value
-          ? <CheckSquare size={this.props.size} />
-          : <Square size={this.props.size}/>
-        }
-      </span>
-    );
-  }
-
-  onClick() {
-    const newValue = !this.state.value
-    this.setState({
-      value: newValue
-    });
-    this.props.onChange && this.props.onChange(newValue);
-  }
-}
-
-export default CheckboxClass;
+export default Checkbox;

@@ -1,6 +1,5 @@
 // Если компонент не понадобится - упразднить
 import {connect} from 'react-redux';
-import {addTodoActionCreator} from '@store/actions';
 import AddTodoForm from './AddTodoForm';
 
 const mapStateToProps = (state, ownProps) => {
