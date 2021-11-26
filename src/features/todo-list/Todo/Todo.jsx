@@ -1,9 +1,11 @@
-import {useState} from 'react'
+import {useState, useCallback} from 'react'
 import Checkbox from '@ui-kit/Checkbox/Checkbox';
 import classes from "./Todo.module.scss";
 import {BackspaceReverse, Check2Circle, Pen, XCircle} from 'react-bootstrap-icons';
 import Form from 'react-bootstrap/Form';
 import Button from '@ui-kit/Button/Button/Button';
+import {useProgressContext} from '@contexts/progress.context';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 // function getStateFromProps(props) {
@@ -30,6 +32,8 @@ function Todo ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedText, setEditedText] = useState('');
   const [isProgress, setIsProgress] = useState(false);
+  const {increment, decrement, progressCounter} = useProgressContext();
+
   // state = getStateFromProps(this.props);
   // state = {
   //   isHovered: false,
@@ -43,15 +47,37 @@ function Todo ({
   //   }
   //   return null;
   // }
-  const onChange = isChecked => {
+
+  // const setProgresses = useCallback(value => {
+  //   setIsProgress(value)
+  //   debugger
+  //   console.log(progressCounter)
+  //   if (value) {
+  //     increment()
+  //   } else {
+  //     decrement()
+  //   }
+  // }, [setIsProgress, increment, decrement, progressCounter])
+
+  const startProgress = useCallback(() => {
     setIsProgress(true);
+    increment();
+  }, [setIsProgress, increment]);
+
+  const endProgress = useCallback(() => {
+    setIsProgress(false);
+    decrement();
+  }, [setIsProgress, decrement]);
+
+  const onChange = useCallback(isChecked => {
+    startProgress();
     onCheck({
       id: todo.id,
       isChecked: isChecked
-    }).then(() => setIsProgress(false))
-  };
+    }).finally(endProgress);
+  }, [startProgress, endProgress, onCheck, todo]);
 
- const onEnter = () => {
+  const onEnter = () => {
     setIsHovered(true);
   }
 
@@ -86,14 +112,16 @@ function Todo ({
 
   const onSaveEditing = () => {
     setIsProgress(true);
+    increment()
     editTodo({
       title: editedText, 
       id: todo.id
     })
     .then(() => stopEditing())
     .finally(() => {
-      setIsProgress(false);
-    });  
+      decrement()
+      setIsProgress(false)
+    });
   }
 
   const stopEditing = () => {
@@ -104,6 +132,7 @@ function Todo ({
   if(isEditMode) {
     todoClasses.push(classes['Todo--edit']);
   }
+ 
 
   return (
     <div
@@ -127,20 +156,22 @@ function Todo ({
           : todo.title
         }
       </span>
-      {isHovered && !isEditMode
+      {isHovered && !isEditMode && !isProgress
         ? <>
-            <Button 
+            <Button
               Icon={Pen}
-              onClick={onEditClick} 
+              onClick={onEditClick}
+              tooltipTitle='Edit todo'
             />
             <Button
               Icon={XCircle}
-              onClick={() => deleteTodo()} 
+              onClick={() => deleteTodo()}
+              tooltipTitle='Delete todo'
             />
           </>
         : null
       }
-      {isEditMode
+      {isEditMode && !isProgress
         ? <>
             <Button
               Icon={Check2Circle}
@@ -153,7 +184,18 @@ function Todo ({
           </>
         : null
       }
-      {isProgress && <div>Working...</div>}
+      {
+        isProgress &&
+        <CircularProgress
+          variant='indeterminate'
+          color='primary'
+          className={classes.Todo__ProgressBar}
+          style={{
+            height: 20,
+            width: 20
+          }}
+        />
+      }
     </div>
   );
 } 

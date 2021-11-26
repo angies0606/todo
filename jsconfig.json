@@ -9,7 +9,9 @@
       "@ui-kit/*": ["./ui-kit/*"],
       "@dialogs/*": ["./dialogs/*"],
       "@store/*": ["./store/*"],
-      "@api/*": ["./api/*"]
+      "@api/*": ["./api/*"],
+      "@contexts/*": ["./contexts/*"],
+      "@hooks/*": ["./hooks/*"]
     }
   }
 }

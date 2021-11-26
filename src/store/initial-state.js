@@ -7,7 +7,8 @@ const initialState = {
       //   id: 'todoList1',
       //   title: 'List 111111',
       //   description: 'tl1 description',
-      //   todos: ['todo1', 'todo3']
+      //   todos: ['todo1', 'todo3'],
+          // group:
       // },
       // todoList2: {
       //   id: 'todoList2',

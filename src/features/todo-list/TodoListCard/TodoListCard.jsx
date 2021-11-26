@@ -9,7 +9,7 @@ import * as api from '@api/api'
 // import { propTypes } from 'react-bootstrap/esm/Image';
 
 function TodoListCard({
-  todoList, 
+  todoList,
   addTodos,
   addTodo,
   deleteTodo,
@@ -23,10 +23,6 @@ function TodoListCard({
       addTodos(todos);
     });
   }, [todoList?.id, addTodos]);
-
-  if(!todoList) {
-    return <Redirect to='/'/>;
-  }
 
   const onAddTodo = newTodo =>  {
     const payload = {
@@ -85,6 +81,11 @@ function TodoListCard({
       console.log(e)
     );
   }
+
+  if (!todoList) {
+    return <>Loading...</>;
+  }
+
   return (
     <Card className={classes.Card}>
       <Card.Body>

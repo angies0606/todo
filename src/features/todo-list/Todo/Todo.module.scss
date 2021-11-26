@@ -11,7 +11,7 @@
 }
 
 .Todo__Text {
-  margin-left: 10px;
+  margin: 0 10px;
   flex: 1 0 auto;
 }
 
@@ -30,4 +30,8 @@
   outline: none;
   margin: 8px;
   cursor: pointer;
+}
+
+.Todo__ProgressBar.Todo__ProgressBar {
+ 
 }

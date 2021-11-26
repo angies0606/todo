@@ -2,6 +2,7 @@ import classes from './AddTodoListButton.module.scss';
 import {Plus} from 'react-bootstrap-icons';
 import {useState} from 'react';
 import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
+import Tooltip from '@ui-kit/Tooltip/Tooltip';
 import * as api from '@api/api';
 
 function AddTodoListButton ({
@@ -13,7 +14,7 @@ function AddTodoListButton ({
   //   hover: false,
   //   isAddTodoListDialogVisible: false
   // };
-  
+
   const onAddTodoList = (newTodoList) => {
     return api.addTodoList({
       ...newTodoList,
@@ -50,18 +51,20 @@ function AddTodoListButton ({
 
   return (
     <>
-      <button
-        className={classes.AddTodoListButton}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        onClick={onMouseClick}
-      >
-        <Plus
-          className={classes.AddTodoListButton__icon}
-          size={35}
-          color={hover ? 'white' : 'coral'}
-        />
-      </button>
+      <Tooltip title='Add todo list'>
+        <button
+          className={classes.AddTodoListButton}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          onClick={onMouseClick}
+        >
+          <Plus
+            className={classes.AddTodoListButton__icon}
+            size={35}
+            color={hover ? 'white' : 'coral'}
+          />
+        </button>
+      </Tooltip>
 
       <TodoListDialog
         show={isAddTodoListDialogVisible}

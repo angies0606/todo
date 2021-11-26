@@ -2,6 +2,10 @@ import React, {useState, useEffect} from 'react';
 import Form from 'react-bootstrap/Form';
 import Dialog from '@ui-kit/Dialog/Dialog';
 import Spacer from '@ui-kit/Spacer/Spacer';
+import LinearProgress from '@mui/material/LinearProgress';
+import classes from './TodoListDialog.module.scss';
+
+
 
 function isTitleValid (value) {
   return value?.length >= 3;
@@ -83,32 +87,38 @@ function TodoListDialog(props) {
       show={props.show}
       title={props.title}
       body={
-        <Form as="div">
-          <Form.Group controlId="title">
-            <Form.Label>Title *</Form.Label>
-            <Form.Control
-              autoComplete="off"
-              placeholder="Enter title (3+ symbols)"
-              onChange={onTitleChange}
-              value={title.value}
-            />
-          </Form.Group>
+        <>
+          {
+            isProgress &&
+            <LinearProgress className={classes.TodoListDialog__ProgressBar} variant='indeterminate' color='primary' />
+          }
+          <Form as="div">
+            <Form.Group controlId="title">
+              <Form.Label>Title *</Form.Label>
+              <Form.Control
+                autoComplete="off"
+                placeholder="Enter title (3+ symbols)"
+                onChange={onTitleChange}
+                value={title.value}
+              />
+            </Form.Group>
 
-          <Spacer />
+            <Spacer />
 
-          <Form.Group controlId="description">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              autoComplete="off"
-              as="textarea"
-              rows={3}
-              placeholder="Enter description"
-              onChange={onDescriptionChange}
-              value={description.value}
-            />
-          </Form.Group>
-          {isProgress && <div>Working...</div>}
-        </Form> 
+            <Form.Group controlId="description">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                autoComplete="off"
+                as="textarea"
+                rows={3}
+                placeholder="Enter description"
+                onChange={onDescriptionChange}
+                value={description.value}
+              />
+            </Form.Group>
+              {/* {isProgress && <LinearProgress variant='indeterminate' color='primary' />} */}
+          </Form>
+        </>
       }
       confirmText={props.confirmText}
       disableConfirm={!isFormValid() || isProgress}

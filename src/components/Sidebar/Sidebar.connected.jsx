@@ -8,7 +8,8 @@ import { connect } from 'react-redux';
 import Sidebar from './Sidebar';
 
 const mapStateToProps = (state) => ({
-  todoLists: state.todoLists.map(todoListId => state.entities.todoLists[todoListId])
+  todoLists: state.todoLists.map(todoListId => state.entities.todoLists[todoListId]),
+  todoListsIds: state.todoLists
   // routerState: state.router
 });
 

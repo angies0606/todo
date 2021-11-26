@@ -5,16 +5,21 @@ import {ThreeDotsVertical} from 'react-bootstrap-icons';
 import classes from './Sidebar.module.scss';
 import Dropdown from '@ui-kit/Dropdown/Dropdown';
 import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
+import {DragDropContext} from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 import * as api from '@api/api';
 
+const sidebarDnDId = 'sidebar';
 
 function Sidebar({
   putTodoLists,
   editTodoList,
   className,
   todoLists,
-  deleteTodoList
+  deleteTodoList,
+  todoListsIds
 }) {
+  
   const [editedTodoList, setEditedTodoList] = useState(null);
 
   useEffect(() => {
@@ -44,36 +49,78 @@ function Sidebar({
     setEditedTodoList(null);
   }
 
+  const onDragEnd = (result) => {
+    const {destination, source, draggableId} = result;
+    if(!destination) {
+      return;
+    }
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === <source className="index" />
+    ) {
+      return;
+    }
+    /* пока что в проекте присутствует одна колонка, в которой совершается DnD, 
+    когда будет групп с TodoLists - переписать константы column
+    */
+    const TodoListsIds = todoListsIds;
+    TodoListsIds.splice(source.index, 1);
+    TodoListsIds.splice(destination.index, 0 , draggableId);
+    
+
+  }
+
   return (
     <>
-      <Nav defaultActiveKey="/home" className={className + ' flex-column bg-light'}>
-        {
-          todoLists.map(todoList =>
-            <Nav.Link
-              key={todoList.id}
-              className={classes.NavLink}
-              as='span'
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId={sidebarDnDId}>
+          {(provided) => (
+            <Nav 
+              defaultActiveKey="/home" 
+              className={className + ' flex-column bg-light'}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
             >
-              <Link to={`/todo-list/${todoList.id}`}>
-                {todoList.title}
-              </Link>
-              <Dropdown
-                icon={ThreeDotsVertical} 
-                items={[
-                  {
-                    title: 'Delete',
-                    onClick: () => onDeleteTodoList(todoList)
-                  },
-                  {
-                    title: 'Edit',
-                    onClick: () => todoListIsEdited(todoList)
-                  },
-                ]}
-              />
-            </Nav.Link>
-          )
-        }
-      </Nav>
+              {
+                todoLists.map((todoList, index) =>
+                  <Draggable key={todoList.id} draggableId={todoList.id.toString()} index={index}> 
+                    {(provided) => (
+                      <Nav.Link
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                        className={classes.NavLink}
+                        as='span'
+                      >
+                        <Link 
+                          to={`/todo-list/${todoList.id}`}
+
+                        >
+                          {todoList.title}
+                        </Link>
+                        <Dropdown
+                          icon={ThreeDotsVertical} 
+                          items={[
+                            {
+                              title: 'Delete',
+                              onClick: () => onDeleteTodoList(todoList)
+                            },
+                            {
+                              title: 'Edit',
+                              onClick: () => todoListIsEdited(todoList)
+                            },
+                          ]}
+                        />
+                      </Nav.Link>
+                    )}
+                  </Draggable>
+                )
+              }
+              {provided.placeholder}
+            </Nav>
+          )}
+        </Droppable>
+      </DragDropContext>
       <TodoListDialog
         show={Boolean(editedTodoList)}
         onClose={onEditTodoListDialogClose}

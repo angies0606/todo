@@ -7,7 +7,9 @@ module.exports = function override(config) {
     '@ui-kit': 'src/ui-kit',
     '@dialogs': 'src/dialogs',
     '@store': 'src/store',
-    '@api': 'src/api'
+    '@api': 'src/api',
+    '@contexts': 'src/contexts',
+    '@hooks': 'src/hooks'
   })(config);
 
   return config;
