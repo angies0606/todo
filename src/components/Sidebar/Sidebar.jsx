@@ -8,6 +8,7 @@ import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
 import {DragDropContext} from 'react-beautiful-dnd';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import * as api from '@api/api';
+import useSnackbar from '@hooks/useSnackbar';
 
 const sidebarDnDId = 'sidebar';
 
@@ -21,6 +22,7 @@ function Sidebar({
 }) {
   
   const [editedTodoList, setEditedTodoList] = useState(null);
+  const {enqueueSnackbar} = useSnackbar();
 
   useEffect(() => {
     api.getTodoLists().then(todoLists => {
@@ -30,15 +32,33 @@ function Sidebar({
 
   const onDeleteTodoList = async todoList => {
     await api.deleteTodoList(todoList)
-
-    deleteTodoList(todoList);
-  };
+    .then(() => {
+      deleteTodoList(todoList);
+    })
+    .then(() => {
+      enqueueSnackbar('Todo list was deleted successfully', 'success')
+    })
+    .catch((e) => {
+      if(e?.response?.status >= 400 && e?.response?.status < 500) {
+        enqueueSnackbar('Error! Deleting todo list failed', 'error'); 
+      }
+    })
+  }
 
   const onEditTodoListConfirm = (editedData) => {
     return api.editTodoList(editedTodoList.id, editedData)
       .then(result => {
         editTodoList(result);
         onEditTodoListDialogClose();
+      })
+      .then(() => {
+        onEditTodoListDialogClose();
+        enqueueSnackbar('Todo list was edited successfully', 'success')
+      })
+      .catch((e) => {
+        if(e?.response?.status >= 400 && e?.response?.status < 500) {
+          enqueueSnackbar('Error! Editing todo list failed', 'error'); 
+        }
       })
   }
   const todoListIsEdited = todoList => {
@@ -67,7 +87,6 @@ function Sidebar({
     TodoListsIds.splice(source.index, 1);
     TodoListsIds.splice(destination.index, 0 , draggableId);
     
-
   }
 
   return (

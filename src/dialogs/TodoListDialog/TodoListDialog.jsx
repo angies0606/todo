@@ -7,6 +7,7 @@ import classes from './TodoListDialog.module.scss';
 
 
 
+
 function isTitleValid (value) {
   return value?.length >= 3;
 }
@@ -33,13 +34,14 @@ function TodoListDialog(props) {
       });
     }
   }, [props.todoList]);
-
+ 
   const onConfirmTodoList = () => {
     setIsProgress(true);
 
     const todoListData = {
       title: title.value,
-      description: description.value
+      description: description.value,
+      createdAt: new Date()
     }
     props.onConfirm(todoListData)
       .then(() => {

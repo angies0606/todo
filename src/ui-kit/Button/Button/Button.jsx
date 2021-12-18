@@ -1,10 +1,12 @@
 import classes from './Button.module.scss';
 import Tooltip from '@ui-kit/Tooltip/Tooltip';
+import classNames from 'classnames';
 
 function Button ({
   onClick,
-  Icon,
-  tooltipTitle = ''
+  tooltipTitle = '',
+  children,
+  className = ''
 }) {
   const isTooltipEnabled = Boolean(tooltipTitle);
 
@@ -16,12 +18,12 @@ function Button ({
       disableTouchListener={!isTooltipEnabled}
     >
       <button
-        className={classes.Button}
+        className={classNames(classes.Button, className)}
         // onMouseEnter={this.onMouseEnter}
         // onMouseLeave={this.onMouseLeave}
         onClick={() => onClick()}
       >
-        <Icon size={30} />
+        {children}
       </button>
     </Tooltip>
   )

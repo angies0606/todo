@@ -5,7 +5,8 @@ import { Redirect } from 'react-router-dom';
 import TodosCollectionConnected from '@features/todo-list/TodosCollection/TodosCollection.connected';
 import classes from './TodoListCard.module.scss';
 import { useEffect } from 'react';
-import * as api from '@api/api'
+import * as api from '@api/api';
+import useSnackbar from '@hooks/useSnackbar';
 // import { propTypes } from 'react-bootstrap/esm/Image';
 
 function TodoListCard({
@@ -15,6 +16,7 @@ function TodoListCard({
   deleteTodo,
   editTodo
 }) {
+  const {enqueueSnackbar} = useSnackbar();
   useEffect(() => {
     if(!todoList) {
       return;
@@ -30,20 +32,27 @@ function TodoListCard({
       todoListId: todoList.id
     };
 
-    return api.addTodo(payload).then(todoResult => {
-      return api.addTodoInTodoList(todoList.id, {
-          todos: [
-            ...todoList.todos,
-            todoResult.id
-          ]
-        }).then((todoListResult) => [todoResult, todoListResult]);
+    return api.addTodo(payload)
+      .then(todoResult => {
+        return api.addTodoInTodoList(todoList.id, {
+            todos: [
+              ...todoList.todos,
+              todoResult.id
+            ]
+          })
+          .then((todoListResult) => [todoResult, todoListResult]);
       })
       .then(([todoResult, todoListResult]) => {
         addTodo(todoResult, todoListResult);
       })
-      .catch((e) =>
-        console.log(e)
-      );
+      .then(() => {
+        enqueueSnackbar("New todo was added", "success");
+      })
+      .catch((e) => {
+        if(e?.response?.status >= 400 && e?.response?.status < 500) {
+          enqueueSnackbar("Error! Adding todo failed", "error"); 
+        }
+      })
   }
 
   const onDeleteTodo = (todoId) => {
@@ -55,20 +64,31 @@ function TodoListCard({
     .then(result => {
       deleteTodo(todoId, result);
     })
-    .catch((e) =>
-      console.log(e)
-    );
+    .then(() =>{
+      enqueueSnackbar('Todo was deleted successfully', 'success');
+    })
+    .catch((e) => {
+      if(e?.response?.status >= 400 && e?.response?.status < 500) {
+        enqueueSnackbar('Error! Deleting todo failed', 'error'); 
+      }
+    })
   }
   
   const onEditTodo = (todoData) => {
     return api.editTodo(todoData.id, {
       title: todoData.title
-    }).then(result => {
+    })
+    .then(result => {
       editTodo(result);
     })
-    .catch((e) =>
-      console.log(e)
-    );
+    .then(() => {
+      enqueueSnackbar('Todo was edited successfully', 'success');
+    })
+    .catch((e) => {
+      if(e?.response?.status >= 400 && e?.response?.status < 500) {
+        enqueueSnackbar('Error! Editing todo failed', 'error'); 
+      }
+    })
   }
 
   const onCheckTodo = (todoData) => {

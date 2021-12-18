@@ -3,6 +3,8 @@ import BootstrapDropdown from "react-bootstrap/Dropdown";
 import classes from './Dropdown.module.scss';
 
 
+
+
 function Dropdown (props) {
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <span
@@ -18,19 +20,19 @@ function Dropdown (props) {
   ));
 
   return (
-    <BootstrapDropdown>
-      <BootstrapDropdown.Toggle as={CustomToggle} />
-      <BootstrapDropdown.Menu size="sm" title="">
-        {props.items.map((item) => {
-          return <BootstrapDropdown.Item 
-            onClick={item.onClick}
-            key={item.title}
-          >
-            {item.title}
-          </BootstrapDropdown.Item>
-        })}
-      </BootstrapDropdown.Menu>
-    </BootstrapDropdown>
+      <BootstrapDropdown>
+        <BootstrapDropdown.Toggle as={CustomToggle} />
+        <BootstrapDropdown.Menu size="sm" title="">
+          {props.items.map((item) => {
+            return <BootstrapDropdown.Item 
+              onClick={item.onClick}
+              key={item.title}
+            >
+              {item.title}
+            </BootstrapDropdown.Item>
+          })}
+        </BootstrapDropdown.Menu>
+      </BootstrapDropdown>
   );
 }
 

@@ -11,8 +11,8 @@ function AddTodoForm ({
     value: '',
     isValid: false
   })
-  const [isProgress, setIsProgress] = useState(false);
-  
+  // const [isProgress, setIsProgress] = useState(false);
+
   const onTitleChange = (e) => {
     // const value = e.target.value;
     // const isValid = value?.length >= 3;
@@ -32,7 +32,7 @@ function AddTodoForm ({
   }
 
   const addTodoOnServer = () => {
-    setIsProgress(true);
+    // setIsProgress(true);
 
     const newTodo = {
       title: title.value,
@@ -47,12 +47,13 @@ function AddTodoForm ({
         });
       })
       .finally(() => {
-        setIsProgress(false)
+        // setIsProgress(false);
       });
   }
 
   const isDisabled = () => {
-    return !title.isValid || isProgress;
+    // return !title.isValid || isProgress;
+    return !title.isValid;
   }
 
   return (
@@ -76,7 +77,7 @@ function AddTodoForm ({
       >
         Add Todo
       </Button>
-      {isProgress && <div>Working...</div>}
+      {/* {isProgress && <div>Working...</div>} */}
     </Form>
   );
 }

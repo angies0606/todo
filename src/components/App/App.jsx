@@ -14,59 +14,50 @@ import history from '../../history';
 import {ProgressContext} from '@contexts/progress.context';
 import {useProgress} from '@hooks/useProgress';
 import GlobalProgress from '@components/GlobalProgress/GlobalProgress';
-import {throttle} from 'lodash'
-
-function _doRequest() {
-
-}
-
-const doRequest = throttle(_doRequest, 500)
+import SnackbarProvider from '../SnackBarProvider/SnackbarProvider';
+import AxiosProvider from '@components/AxiosProvider/AxiosProvider';
 
 function App() {
-  const progress = useProgress()
-
-  // const increment = useCallback(() => {
-  //   setProgressCounter(progressCounter + 1)
-  // }, [progressCounter, setProgressCounter])
-
-  // const decrement = useCallback(() => {
-  //   setProgressCounter(progressCounter - 1)
-  // }, [progressCounter, setProgressCounter])
-
+  const progress = useProgress();
+  
   return (
     <>
-      <ProgressContext.Provider value={progress}>
-        <GlobalProgress />
-        <ConnectedRouter history={history}>
-          <div className={classes.App}>
-            <Navbar className={classes.Navbar}/>    
-              <SidebarContainer className={classes.SidebarContainer}>
-                <Switch>
-                  <Route path='/' exact>
-                    <Card>
-                      <Card.Body>
-                        <Card.Title>
-                          Welcome!
-                        </Card.Title>
-                      </Card.Body>
-                    </Card>
-                  </Route>
-                  <Route
-                    path='/todo-list/:todoListId'// /todo-list/:ngreo32234?eriber=443tg todoListId - это динамический сегмент URL, который будет меняться
-                    exact
-                    render={(arg) => (
-                      <TodoListCardConnected todoListId={arg.match.params.todoListId} /> // передаем компоненту todoListId 
-                    )}
-                    // render={({match:{params:{todoListId}}}) => (
-                    //  <TodoListCardConnected todoListId={todoListId}/>
-                    // )} - деструктуризация аргумента функции
-                  ></Route>
-                  <Redirect from='*' to='/'></Redirect>
-                </Switch>
-              </SidebarContainer>
-          </div>
-        </ConnectedRouter>
-      </ProgressContext.Provider>
+      <SnackbarProvider>
+        <AxiosProvider>
+            <ProgressContext.Provider value={progress}>
+              <GlobalProgress />
+              <ConnectedRouter history={history}>
+                <div className={classes.App}>
+                  <Navbar className={classes.Navbar}/>
+                    <SidebarContainer className={classes.SidebarContainer}>
+                      <Switch>
+                        <Route path='/' exact>
+                          <Card>
+                            <Card.Body>
+                              <Card.Title>
+                                Welcome!
+                              </Card.Title>
+                            </Card.Body>
+                          </Card>
+                        </Route>
+                        <Route
+                          path='/todo-list/:todoListId'// /todo-list/:ngreo32234?eriber=443tg todoListId - это динамический сегмент URL, который будет меняться
+                          exact
+                          render={(arg) => (
+                            <TodoListCardConnected todoListId={arg.match.params.todoListId} /> // передаем компоненту todoListId 
+                          )}
+                          // render={({match:{params:{todoListId}}}) => (
+                          //  <TodoListCardConnected todoListId={todoListId}/>
+                          // )} - деструктуризация аргумента функции
+                        ></Route>
+                        <Redirect from='*' to='/'></Redirect>
+                      </Switch>
+                    </SidebarContainer>
+                </div>
+              </ConnectedRouter>
+            </ProgressContext.Provider>
+          </AxiosProvider>
+      </SnackbarProvider>
     </>
   );
 }

@@ -4,12 +4,15 @@ import {useState} from 'react';
 import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
 import Tooltip from '@ui-kit/Tooltip/Tooltip';
 import * as api from '@api/api';
+import useSnackbar from '@hooks/useSnackbar';
+
 
 function AddTodoListButton ({
   addTodoList
 }){
   const [hover, setHover] = useState(false);
   const [isAddTodoListDialogVisible, setIsAddTodoListDialogVisible] = useState(false);
+  const {enqueueSnackbar} = useSnackbar();
   // state = {
   //   hover: false,
   //   isAddTodoListDialogVisible: false
@@ -23,8 +26,13 @@ function AddTodoListButton ({
       addTodoList(result);
       onAddTodoListDialogClose();
     })
+    .then(() => {
+      enqueueSnackbar('New todo list was added successfully', 'success');
+    })
     .catch((e) => {
-      console.log(e)
+      if(e?.response?.status >= 400 && e?.response?.status < 500) {
+        enqueueSnackbar('Error! Adding todo list failed', 'error'); 
+      }
     })
   }
   
