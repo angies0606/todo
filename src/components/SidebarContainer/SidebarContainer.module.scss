@@ -1,11 +1,10 @@
 .SidebarContainer {
   display: flex;
   width: 100%;
-  
-
+ 
   &__Sidebar {
-    width: 180px;
-    background-color: #111111;
+    width: 230px;
+    background-color: rgb(164, 201, 255);
     flex-direction: row;
    
   }

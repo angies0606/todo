@@ -1,10 +1,12 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import MuiButton from 'react-bootstrap/Button';
+import Button from '@ui-kit/Button/Button/Button';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import ModalBody from 'react-bootstrap/ModalBody';
 import ModalFooter from 'react-bootstrap/ModalFooter';
+import classes from './Dialog.module.scss';
 
 /**
  * Props:
@@ -37,8 +39,8 @@ function Dialog({
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <ModalHeader closeButton={true}>
-        <ModalTitle>
+      <ModalHeader closeButton className= {classes.Dialog__Header}>
+        <ModalTitle className= {classes.Dialog__Title}>
           {title}
         </ModalTitle>
       </ModalHeader>
@@ -46,16 +48,19 @@ function Dialog({
         {body}
       </ModalBody>
       <ModalFooter>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button 
+          onClick={handleClose}
+          className={classes.Dialog__CloseButton}
+        >
           {cancelText}
         </Button>
-        <Button
+        <MuiButton
           variant="primary"
           onClick={handleConfirm}
           disabled={disableConfirm}
         >
           {confirmText}
-        </Button>
+        </MuiButton>
       </ModalFooter>
     </Modal>
   );

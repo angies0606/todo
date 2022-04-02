@@ -4,16 +4,19 @@
   width: 35px;
   display: flex;
   align-items: center;
-  border: solid 3px coral;
+  border: solid 3px #ff7f50;
+  background-color: coral;
   padding: 0;
   outline: none;
 }
 
 .AddTodoListButton:hover {
-  background-color: coral;
+  background-color: rgb(221, 99, 55);
+  border: solid 3px rgb(221, 99, 55);
 }
 
 .AddTodoListButton__icon {
   padding: 0;
   margin: 0;
+  color: white;
 }

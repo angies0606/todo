@@ -56,6 +56,7 @@ function Todo ({
   //   }
   // }, [setIsProgress, increment, decrement, progressCounter])
 
+  //TODO: вставить везде функции startProgress и endPogress где меняется isProgress
   const startProgress = useCallback(() => {
     setIsProgress(true);
   }, [setIsProgress]);

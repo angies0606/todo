@@ -4,3 +4,16 @@
   left: 0;
   width: 100%;
 }
+
+.TodoListDialog__HelperText {
+  color: rgb(8,45,99);
+  font-weight: bolder;
+}
+
+.TodoListDialog__Label {
+  font-weight: bolder;
+}
+
+.TodoListDialog__Label span {
+  color: coral;
+}

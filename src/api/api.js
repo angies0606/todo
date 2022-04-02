@@ -37,8 +37,8 @@ export function editTodoList(todoListId, todoList) {
   return axios.patch(`todo-lists/${todoListId}`, todoList);
 }
 
-export function getTodos(todoListId) {
-  return axios.get(`todo-lists/${todoListId}/todos?todoListId=${todoListId}`);
+export function getTodos(todoListId, page, pageSize) {
+  return axios.get(`todo-lists/${todoListId}/todos?todoListId=${todoListId}&_page=${page}&_limit=${pageSize}`);
 }
 
 export function addTodo(payload) {

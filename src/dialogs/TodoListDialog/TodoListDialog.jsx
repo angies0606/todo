@@ -4,12 +4,14 @@ import Dialog from '@ui-kit/Dialog/Dialog';
 import Spacer from '@ui-kit/Spacer/Spacer';
 import LinearProgress from '@mui/material/LinearProgress';
 import classes from './TodoListDialog.module.scss';
-
-
-
+import moment from 'moment';
 
 function isTitleValid (value) {
   return value?.length >= 3;
+}
+
+function isDescriptionValid (value) {
+  return value?.length <= 350;
 }
 
 function TodoListDialog(props) {
@@ -18,7 +20,8 @@ function TodoListDialog(props) {
     isValid: false
   });
   const [description, setDescription] = useState({
-    value: ''
+    value: '',
+    isValid: true
   });
   const [isProgress, setIsProgress] = useState(false);
 
@@ -30,7 +33,8 @@ function TodoListDialog(props) {
         isValid: isTitleValid(props.todoList.title)
       });
       setDescription({
-        value: props.todoList.description
+        value: props.todoList.description,
+        isValid: isDescriptionValid(props.todoList.description)
       });
     }
   }, [props.todoList]);
@@ -41,7 +45,7 @@ function TodoListDialog(props) {
     const todoListData = {
       title: title.value,
       description: description.value,
-      createdAt: new Date()
+      createdAt: Date.now()
     }
     props.onConfirm(todoListData)
       .then(() => {
@@ -61,7 +65,8 @@ function TodoListDialog(props) {
 
   const onDescriptionChange = e => {
     setDescription({
-      value: e.target.value
+      value: e.target.value,
+      isValid: isDescriptionValid(e.target.value)
     });
   };
 
@@ -71,7 +76,8 @@ function TodoListDialog(props) {
       isValid: false
     });
     setDescription({
-      value: ''
+      value: '',
+      isValid: true
     });
   }
 
@@ -81,7 +87,7 @@ function TodoListDialog(props) {
   }
 
   const isFormValid = () => {
-    return title?.isValid;
+    return title?.isValid && description?.isValid;
   }
 
   return (
@@ -92,31 +98,39 @@ function TodoListDialog(props) {
         <>
           {
             isProgress &&
-            <LinearProgress className={classes.TodoListDialog__ProgressBar} variant='indeterminate' color='primary' />
+            <LinearProgress className={classes.TodoListDialog__ProgressBar} variant='indeterminate' color='warning' />
           }
           <Form as="div">
             <Form.Group controlId="title">
-              <Form.Label>Title *</Form.Label>
+              <Form.Label className={classes.TodoListDialog__Label}>Title <span>*</span></Form.Label>
               <Form.Control
                 autoComplete="off"
-                placeholder="Enter title (3+ symbols)"
+                placeholder="Enter title"
                 onChange={onTitleChange}
                 value={title.value}
               />
+              <Form.Text className={classes.TodoListDialog__HelperText}>
+                Enter more than 3 symbols
+              </Form.Text>
             </Form.Group>
 
             <Spacer />
 
             <Form.Group controlId="description">
-              <Form.Label>Description</Form.Label>
+              <Form.Label className={classes.TodoListDialog__Label}>Description</Form.Label>
               <Form.Control
                 autoComplete="off"
                 as="textarea"
-                rows={3}
+                rows={4}
+                maxLength={350}
                 placeholder="Enter description"
                 onChange={onDescriptionChange}
                 value={description.value}
+                style={{maxHeight: 150, minHeight: 70}}
               />
+              <Form.Text className={classes.TodoListDialog__HelperText}>
+                 Maximum 350 symbols
+              </Form.Text>
             </Form.Group>
               {/* {isProgress && <LinearProgress variant='indeterminate' color='primary' />} */}
           </Form>

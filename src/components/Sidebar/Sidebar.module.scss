@@ -1,7 +1,29 @@
-.NavLink {
+.Sidebar__NavLink {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: white;
-  border: solid 1px black;
+  background-color: rgb(238, 244, 253);
+  border: solid 1px rgb(42,54,134);
+  border-radius: 0.25rem;
+  box-shadow: 2px 1px 1px rgb(51, 51, 66) ;
 }
+
+.Sidebar__Link {
+  text-decoration: none;
+  color: rgb(33,37,41);
+  font-weight: bold;
+}
+
+.Sidebar__Link:hover {
+  color: rgb(33,37,41);;
+  
+}
+
+.Sidebar__NavLink:hover {
+  background-color: rgb(211, 225, 247);
+}
+
+.Sidebar__Dropdown:hover {
+  color: rgb(83, 105, 250);
+}
+

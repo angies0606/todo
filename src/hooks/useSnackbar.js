@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import { useSnackbar as useNotistackSnackbar } from 'notistack';
 
 
-
 // const styles = {
 //   success: { backgroundColor: 'purple' },
 //   error: { backgroundColor: 'blue' },
@@ -34,15 +33,12 @@ export default function useSnackbar(message, variant) {
   //   }
   // }, [enqueueNotistackSnackbar]);
  
-  // Мемоизация моей функции-обертки enqueueSnackbar, для предотвращения пересоздания при перерендере компонентов, 
+  // Мемоизация моей функции-обертки enqueueSnackbar для предотвращения пересоздания при перерендере компонентов, 
   // которые используют хук useSnackbar.
   const enqueueSnackbar = useCallback((message, variant) => {
     return enqueueNotistackSnackbar({
       message,
       variant
-    },
-    {
-      autoHideDuration: null
     });
   }, [enqueueNotistackSnackbar])
 
@@ -50,10 +46,14 @@ export default function useSnackbar(message, variant) {
   // которые используют хук useSnackbar.
   const closeSnackbar = useCallback((key) => {
     return closeNotistackSnackbar(key);
-  }, [closeNotistackSnackbar])
+  }, [closeNotistackSnackbar]);
 
-  return {
-    enqueueSnackbar,
-    closeSnackbar
-  }
+  const state = useMemo(() => {
+    return {
+      enqueueSnackbar,
+      closeSnackbar
+    };
+  }, [enqueueSnackbar, closeSnackbar]);
+
+  return state;
 }

@@ -37,7 +37,7 @@ function Checkbox ({
   return (
     <span className={classes.Checkbox} onClick={() => onClick()} >
       {value
-        ? <CheckSquare size={size} />
+        ? <CheckSquare size={size} className={classes.Checkbox__CheckSquare} />
         : <Square size={size}/>
       }
     </span>

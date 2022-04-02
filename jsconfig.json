@@ -11,7 +11,8 @@
       "@store/*": ["./store/*"],
       "@api/*": ["./api/*"],
       "@contexts/*": ["./contexts/*"],
-      "@hooks/*": ["./hooks/*"]
+      "@hooks/*": ["./hooks/*"],
+      "@assets/*": ["./assets/*"]
     }
   }
 }

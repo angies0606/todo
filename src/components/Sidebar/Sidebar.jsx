@@ -69,87 +69,136 @@ function Sidebar({
     setEditedTodoList(null);
   }
 
-  const onDragEnd = (result) => {
-    const {destination, source, draggableId} = result;
-    if(!destination) {
-      return;
-    }
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === <source className="index" />
-    ) {
-      return;
-    }
-    /* пока что в проекте присутствует одна колонка, в которой совершается DnD, 
-    когда будет групп с TodoLists - переписать константы column
-    */
-    const TodoListsIds = todoListsIds;
-    TodoListsIds.splice(source.index, 1);
-    TodoListsIds.splice(destination.index, 0 , draggableId);
+  // const onDragEnd = (result) => {
+  //   const {destination, source, draggableId} = result;
+  //   if(!destination) {
+  //     return;
+  //   }
+  //   if (
+  //     destination.droppableId === source.droppableId &&
+  //     destination.index === <source className="index" />
+  //   ) {
+  //     return;
+  //   }
+  //   /* пока что в проекте присутствует одна колонка, в которой совершается DnD, 
+  //   когда будет групп с TodoLists - переписать константы column
+  //   */
+  //   const TodoListsIds = todoListsIds;
+  //   TodoListsIds.splice(source.index, 1);
+  //   TodoListsIds.splice(destination.index, 0 , draggableId);
     
-  }
+  // }
 
   return (
-    <>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId={sidebarDnDId}>
-          {(provided) => (
-            <Nav 
-              defaultActiveKey="/home" 
-              className={className + ' flex-column bg-light'}
-              ref={provided.innerRef}
-              {...provided.droppableProps}
+  <>
+    <Nav 
+      defaultActiveKey="/home" 
+      className={className + ' flex-column '}
+    >
+      {
+        todoLists.map((todoList, index) => {
+          return (
+            <Link 
+              to={`/todo-list/${todoList.id}`}
+              className={classes.Sidebar__Link}
             >
-              {
-                todoLists.map((todoList, index) =>
-                  <Draggable key={todoList.id} draggableId={todoList.id.toString()} index={index}> 
-                    {(provided) => (
-                      <Nav.Link
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                        className={classes.NavLink}
-                        as='span'
-                      >
-                        <Link 
-                          to={`/todo-list/${todoList.id}`}
+              <Nav.Link
+                className={classes.Sidebar__NavLink}
+                as='span'
+              >
+                {todoList.title}
+                <Dropdown
+                  icon={ThreeDotsVertical}
+                  className={classes.Sidebar__Dropdown} 
+                  items={[
+                    {
+                      title: 'Delete',
+                      onClick: () => onDeleteTodoList(todoList)
+                    },
+                    {
+                      title: 'Edit',
+                      onClick: () => todoListIsEdited(todoList)
+                    },
+                  ]}
+                />
+              </Nav.Link>
+            </Link>
+          )
+        })
+      }
+    </Nav>
+          
+    <TodoListDialog
+      show={Boolean(editedTodoList)}
+      onClose={onEditTodoListDialogClose}
+      onConfirm={onEditTodoListConfirm}
+      title={'Edit list'}
+      confirmText={'Edit'}
+      todoList={editedTodoList}
+      mode={'editOld'}
+    />
+  </>
+    // <>
+    //   <DragDropContext onDragEnd={onDragEnd}>
+    //     <Droppable droppableId={sidebarDnDId}>
+    //       {(provided) => (
+    //         <Nav 
+    //           defaultActiveKey="/home" 
+    //           className={className + ' flex-column '}
+    //           ref={provided.innerRef}
+    //           {...provided.droppableProps}
+    //         >
+    //           {
+    //             todoLists.map((todoList, index) =>
+    //               <Draggable key={todoList.id} draggableId={todoList.id.toString()} index={index}> 
+    //                 {(provided) => (
+    //                   <Nav.Link
+    //                     {...provided.draggableProps}
+    //                     {...provided.dragHandleProps}
+    //                     ref={provided.innerRef}
+    //                     className={classes.NavLink}
+    //                     as='span'
+    //                   >
+    //                     <Link 
+    //                       to={`/todo-list/${todoList.id}`}
+    //                       className={classes.NavLink__Link}
 
-                        >
-                          {todoList.title}
-                        </Link>
-                        <Dropdown
-                          icon={ThreeDotsVertical} 
-                          items={[
-                            {
-                              title: 'Delete',
-                              onClick: () => onDeleteTodoList(todoList)
-                            },
-                            {
-                              title: 'Edit',
-                              onClick: () => todoListIsEdited(todoList)
-                            },
-                          ]}
-                        />
-                      </Nav.Link>
-                    )}
-                  </Draggable>
-                )
-              }
-              {provided.placeholder}
-            </Nav>
-          )}
-        </Droppable>
-      </DragDropContext>
-      <TodoListDialog
-        show={Boolean(editedTodoList)}
-        onClose={onEditTodoListDialogClose}
-        onConfirm={onEditTodoListConfirm}
-        title={'Edit list'}
-        confirmText={'Edit'}
-        todoList={editedTodoList}
-        mode={'editOld'}
-      />
-    </>
+    //                     >
+    //                       {todoList.title}
+    //                     </Link>
+    //                     <Dropdown
+    //                       icon={ThreeDotsVertical} 
+    //                       items={[
+    //                         {
+    //                           title: 'Delete',
+    //                           onClick: () => onDeleteTodoList(todoList)
+    //                         },
+    //                         {
+    //                           title: 'Edit',
+    //                           onClick: () => todoListIsEdited(todoList)
+    //                         },
+    //                       ]}
+    //                     />
+    //                   </Nav.Link>
+    //                 )}
+    //               </Draggable>
+    //             )
+    //           }
+    //           {provided.placeholder}
+    //         </Nav>
+    //       )}
+    //     </Droppable>
+    //   </DragDropContext>
+    //   <TodoListDialog
+    //     show={Boolean(editedTodoList)}
+    //     onClose={onEditTodoListDialogClose}
+    //     onConfirm={onEditTodoListConfirm}
+    //     title={'Edit list'}
+    //     confirmText={'Edit'}
+    //     todoList={editedTodoList}
+    //     mode={'editOld'}
+    //   />
+    // </>
   )
 }
 

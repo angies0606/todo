@@ -1,4 +1,4 @@
-import {useReducer, useCallback, useEffect} from 'react';
+import {useReducer, useCallback, useEffect, useMemo} from 'react';
 import axios from '@api/axios';
 
 /**
@@ -33,12 +33,16 @@ export function useProgress() {
 
   useProgressInAxiosInterceptors(increment, decrement);
 
-  return {
-    increment,
-    decrement,
-    progressCounter,
-    isProgress: progressCounter > 0
-  };
+  const state = useMemo(() => {
+    return {
+      increment,
+      decrement,
+      progressCounter,
+      isProgress: progressCounter > 0
+    };
+  }, [increment, decrement, progressCounter]);
+
+  return state;
 }
 
 function useProgressInAxiosInterceptors(increment, decrement) {

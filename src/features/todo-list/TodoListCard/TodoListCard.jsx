@@ -4,10 +4,15 @@ import AddTodoFormConnected from '@features/todo-list/AddTodoForm/AddTodoForm.co
 import { Redirect } from 'react-router-dom';
 import TodosCollectionConnected from '@features/todo-list/TodosCollection/TodosCollection.connected';
 import classes from './TodoListCard.module.scss';
-import { useEffect } from 'react';
+import {useEffect, useCallback} from 'react';
 import * as api from '@api/api';
 import useSnackbar from '@hooks/useSnackbar';
+import DateBar from '@ui-kit/DateBar/DateBar';
 // import { propTypes } from 'react-bootstrap/esm/Image';
+import { Scrollbar } from "react-scrollbars-custom";
+import classNames from 'classnames';
+
+const pageSize = 5;
 
 function TodoListCard({
   todoList,
@@ -17,14 +22,17 @@ function TodoListCard({
   editTodo
 }) {
   const {enqueueSnackbar} = useSnackbar();
-  useEffect(() => {
-    if(!todoList) {
-      return;
+
+  const getTodos = useCallback((page) => {
+    if (!todoList) {
+      return
     }
-    api.getTodos(todoList.id).then(todos => {
-      addTodos(todos);
-    });
-  }, [todoList?.id, addTodos]);
+
+    return api.getTodos(todoList.id, page, pageSize)
+      .then(todos => {
+        addTodos(todos);
+      });
+  }, [todoList?.id, addTodos])
 
   const onAddTodo = newTodo =>  {
     const payload = {
@@ -73,7 +81,7 @@ function TodoListCard({
       }
     })
   }
-  
+
   const onEditTodo = (todoData) => {
     return api.editTodo(todoData.id, {
       title: todoData.title
@@ -82,7 +90,7 @@ function TodoListCard({
       editTodo(result);
     })
     .then(() => {
-      enqueueSnackbar('Todo was edited successfully', 'success');
+      enqueueSnackbar('Todo was edited successfully','success');
     })
     .catch((e) => {
       if(e?.response?.status >= 400 && e?.response?.status < 500) {
@@ -103,18 +111,23 @@ function TodoListCard({
   }
 
   if (!todoList) {
-    return <>Loading...</>;
+    return <Redirect from='*' to='/'></Redirect>;
   }
 
   return (
     <Card className={classes.Card}>
-      <Card.Body>
+      <Card.Header className={classNames(classes.TodoListCard__Header, "text-center")}>
         <Card.Title>
           {todoList.title}
         </Card.Title>
         <Card.Subtitle className="mb-2 text-muted">
           {todoList.description}
         </Card.Subtitle>
+        <Card.Subtitle className={classNames(classes.TodoListCard__Subtitle, "text-muted")}>
+          <DateBar creationDate={todoList.createdAt}/>
+        </Card.Subtitle>
+      </Card.Header>
+      <Card.Body className={classes.TodoListCard__CardBody}>
 
         <Spacer />
 
@@ -125,16 +138,42 @@ function TodoListCard({
 
         <Spacer />
 
-        <TodosCollectionConnected 
-          todoListId={todoList.id} 
-          onDeleteTodo={onDeleteTodo}
-          onEditTodo={onEditTodo}
-          onCheckTodo={onCheckTodo}
-        />
+        
+        <Scrollbar
+          style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+          scrollerProps={{
+            renderer: props => {
+              const {elementRef, ...restProps} = props;
+              console.log(classes.TodoListCard__ScrollTarget)
+              return <div
+                {...restProps}
+                ref={elementRef}
+                id={classes.TodoListCard__ScrollTarget}
+              ></div>;
+            }
+          }}
+          className={classes.TodoListCard__Scrollbar}
+        >
+          <TodosCollectionConnected
+            className={classes.TodoListCard__TodosCollection}
+            todoListId={todoList.id}
+            onDeleteTodo={onDeleteTodo}
+            onEditTodo={onEditTodo}
+            onCheckTodo={onCheckTodo}
+            getTodos={getTodos}
+            scrollableId={classes.TodoListCard__ScrollTarget}
+          />
+        </Scrollbar>
 
         <Spacer />
 
       </Card.Body>
+      <Card.Footer className={classes.TodoListCard__Footer} />
+
     </Card>
   );
 }

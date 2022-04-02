@@ -8,7 +8,7 @@ function Spinner({
     <>
       <CircularProgress
         variant='indeterminate'
-        color='primary'
+        color='warning'
         style={{
           height: 20,
           width: 20
