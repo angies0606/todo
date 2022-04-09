@@ -3,6 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Spacer from '@ui-kit/Spacer/Spacer';
 import classes from './AddTodoForm.module.scss';
+import { useProgressContext } from '@features/progress/progress.context';
+
 
 function AddTodoForm ({
   onAddTodo
@@ -11,6 +13,7 @@ function AddTodoForm ({
     value: '',
     isValid: false
   })
+  const {isProgress} = useProgressContext();
   // const [isProgress, setIsProgress] = useState(false);
 
   const onTitleChange = (e) => {
@@ -53,7 +56,7 @@ function AddTodoForm ({
 
   const isDisabled = () => {
     // return !title.isValid || isProgress;
-    return !title.isValid;
+    return !title.isValid || isProgress;
   }
 
   return (

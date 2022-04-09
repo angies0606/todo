@@ -1,5 +1,5 @@
 .Todo {
-  height: 44px;
+  height: auto;
   width: 100%;
   padding: 10px 20px;
   display: flex;
@@ -13,6 +13,10 @@
 .Todo__Text {
   margin: 0 10px;
   flex: 1 0 auto;
+  overflow-wrap: break-word;
+  flex: 1 0;
+  overflow: hidden;
+  padding-right: 80px;
 }
 
 .Todo--edit {
@@ -33,9 +37,17 @@
 }
 
 .Todo__ProgressBar.Todo__ProgressBar {
-
+  height: 20px;
+  width: 20px;
 }
 
 .Todo__ButtonIcon {
   background-color: transparent;
 }
+
+.Todo__ButtonBox {
+  position: absolute;
+  display: flex;
+  right: 1rem;
+}
+

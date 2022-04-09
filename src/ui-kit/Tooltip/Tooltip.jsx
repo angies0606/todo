@@ -4,7 +4,7 @@ import MaterialTooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 
 const Tooltip = styled(({ className, ...props }) => (
-  <MaterialTooltip {...props} placement='bottom' arrow classes={{ popper: className }} />
+  <MaterialTooltip {...props} arrow classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
     color: theme.palette.info.main

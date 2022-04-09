@@ -1,17 +1,20 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import Form from 'react-bootstrap/Form';
 import Dialog from '@ui-kit/Dialog/Dialog';
 import Spacer from '@ui-kit/Spacer/Spacer';
 import LinearProgress from '@mui/material/LinearProgress';
 import classes from './TodoListDialog.module.scss';
-import moment from 'moment';
+
+const MAX_TITLE_SYMBOLS = 50;
+const MIN_TITLE_SYMBOLS = 3;
+const MAX_DESCRIPTION_SYMBOLS = 350;
 
 function isTitleValid (value) {
-  return value?.length >= 3;
+  return value?.length >= MIN_TITLE_SYMBOLS && value?.length <= MAX_TITLE_SYMBOLS;
 }
 
 function isDescriptionValid (value) {
-  return value?.length <= 350;
+  return value?.length <= MAX_DESCRIPTION_SYMBOLS;
 }
 
 function TodoListDialog(props) {
@@ -22,6 +25,9 @@ function TodoListDialog(props) {
   const [description, setDescription] = useState({
     value: '',
     isValid: true
+  });
+  const [timeCreation, setTimeCreation] = useState({
+    createdAt: null
   });
   const [isProgress, setIsProgress] = useState(false);
 
@@ -36,6 +42,9 @@ function TodoListDialog(props) {
         value: props.todoList.description,
         isValid: isDescriptionValid(props.todoList.description)
       });
+      setTimeCreation({
+        createdAt: props.todoList.createdAt
+      })
     }
   }, [props.todoList]);
  
@@ -45,8 +54,9 @@ function TodoListDialog(props) {
     const todoListData = {
       title: title.value,
       description: description.value,
-      createdAt: Date.now()
+      createdAt: timeCreation.createdAt || Date.now() 
     }
+
     props.onConfirm(todoListData)
       .then(() => {
         resetFormState();
@@ -107,10 +117,11 @@ function TodoListDialog(props) {
                 autoComplete="off"
                 placeholder="Enter title"
                 onChange={onTitleChange}
+                maxLength={MAX_TITLE_SYMBOLS}
                 value={title.value}
               />
               <Form.Text className={classes.TodoListDialog__HelperText}>
-                Enter more than 3 symbols
+                Enter at least {MIN_TITLE_SYMBOLS} up to {MAX_TITLE_SYMBOLS} symbols
               </Form.Text>
             </Form.Group>
 
@@ -122,14 +133,14 @@ function TodoListDialog(props) {
                 autoComplete="off"
                 as="textarea"
                 rows={4}
-                maxLength={350}
+                maxLength={MAX_DESCRIPTION_SYMBOLS}
                 placeholder="Enter description"
                 onChange={onDescriptionChange}
                 value={description.value}
                 style={{maxHeight: 150, minHeight: 70}}
               />
               <Form.Text className={classes.TodoListDialog__HelperText}>
-                 Maximum 350 symbols
+                 Maximum {MAX_DESCRIPTION_SYMBOLS} symbols
               </Form.Text>
             </Form.Group>
               {/* {isProgress && <LinearProgress variant='indeterminate' color='primary' />} */}

@@ -62,7 +62,7 @@ function AddTodoListButton ({
 
   return (
     <>
-      <Tooltip title='Add todo list'>
+      <Tooltip title='Add todo list' enterDelay={500}>
         <button
           className={classes.AddTodoListButton}
           onMouseEnter={onMouseEnter}

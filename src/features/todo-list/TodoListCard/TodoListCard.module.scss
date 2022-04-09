@@ -1,16 +1,17 @@
-.Card {
-  height: 80%;
-  border-radius: 0.25rem;
-  background-color: rgb(255,255,255);
-  width: 70%;
-  margin: auto;
-  border: 1px solid rgb(42,54,132);
-}
+// .Card {
+//   height: 80%;
+//   border-radius: 0.25rem;
+//   background-color: rgb(255,255,255);
+//   width: 70%;
+//   margin: auto;
+//   border: 1px solid rgb(42,54,132);
+//   min-width: 340px;
+// }
 
-.TodoListCard__CardBody {
-  display: flex;
-  flex-direction: column;
-}
+// .TodoListCard__CardBody {
+//   display: flex;
+//   flex-direction: column;
+// }
 
 .TodoListCard__Scrollbar {
   flex: 1;
@@ -26,17 +27,30 @@
   display: block;
 }
 
-.TodoListCard__Header {
-  border-bottom: 4px solid rgb(42,54,132);
-  background-color: rgb(255,255,255);
-  align-items: center;
+// .TodoListCard__Header {
+//   border-bottom: 4px solid rgb(42,54,132);
+//   background-color: rgb(255,255,255);
+//   align-items: center;
+// }
+
+// .TodoListCard__Footer {
+//   background-color: rgb(42,54,132);
+//   height: 10%;
+// }
+
+// .TodoListCard__Subtitle {
+//   font-size: 12px;
+// }
+
+.TodoListCard__NoData {
+  width: 250px;
+  height: 190px;
+  color: #bad4fa;
+  border-color: #bad4fa;
+  padding: 20px 10px;
+  margin: 33px auto 33px auto;
 }
 
-.TodoListCard__Footer {
-  background-color: rgb(42,54,132);
-  height: 10%;
-}
-
-.TodoListCard__Subtitle {
-  font-size: 12px;
+.TodoListCard__ProgressBar {
+  margin: auto;
 }

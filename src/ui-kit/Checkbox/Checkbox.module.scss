@@ -3,6 +3,12 @@
   cursor: pointer;
 }
 
+.Checkbox--disabled {
+ opacity: 0.6; 
+}
+
 .Checkbox__CheckSquare {
   color: rgb(255,127,80);
 }
+
+

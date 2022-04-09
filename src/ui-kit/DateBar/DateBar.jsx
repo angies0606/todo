@@ -12,22 +12,27 @@ function DateBar ({
     refreshTime();
   }, [creationDate]);
 
-  useEffect(() => {
-    if (currentTimeout === null) return;  
+  function updateTimeout(timeout) {
+    if (timeout === null) {
+      setCurrentTime(null);
+      return;
+    }   
+    if(currentTimeout) {
+      clearTimeout(currentTimeout);
+    }
 
     const timeoutId = setTimeout(() => {
       refreshTime();
-    }, currentTimeout);
+    }, timeout);
 
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [currentTimeout]);
+    setCurrentTimeout(timeoutId);
+  }
+  
 
   const refreshTime = () => {
     const {timeMessage, timeout} = passedTimeCalc(creationDate);
     setCurrentTime(timeMessage);
-    setCurrentTimeout(timeout);
+    updateTimeout(timeout);
   }
 
   return (

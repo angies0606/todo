@@ -5,6 +5,7 @@ import {BackspaceReverse, Check2Circle, Pen, XCircle} from 'react-bootstrap-icon
 import Form from 'react-bootstrap/Form';
 import Button from '@ui-kit/Button/Button/Button';
 import Spinner from '@ui-kit/Spinner/Spinner';
+import Modal from '@ui-kit/Modal/Modal';
 
 // function getStateFromProps(props) {
 //   return {
@@ -30,6 +31,8 @@ function Todo ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedText, setEditedText] = useState('');
   const [isProgress, setIsProgress] = useState(false);
+  const [isModalShown, setIsModalShown] = useState(false);
+
 
   // state = getStateFromProps(this.props);
   // state = {
@@ -65,7 +68,7 @@ function Todo ({
     setIsProgress(false);
   }, [setIsProgress]);
 
-  const onChange = useCallback(isChecked => {
+  const onCheckChange = useCallback(isChecked => {
     startProgress();
     onCheck({
       id: todo.id,
@@ -121,6 +124,13 @@ function Todo ({
   }
 
   const onDeleteTodo = () => {
+    setIsModalShown(true);
+  }
+  const onModalClose = () => {
+    setIsModalShown(false);
+  }
+  const onDeleteTodoConfirm = () => {
+    setIsModalShown(false);
     setIsProgress(true);
     deleteTodo()
     .finally(() => {
@@ -149,66 +159,78 @@ function Todo ({
   }
  
   return (
-    <div
-      className={todoClasses.join(' ')}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-    >
-      <Checkbox value={todo.isChecked} onChange={onChange} size={24}/>
-      <span className={classes.Todo__Text}>
-        {isEditMode
-          ? <Form.Control
-              autoFocus={true}
-              size="sm"
-              type="text"
-              value={editedText}
-              onChange={onTodoTextChange}
-              onKeyPress={onKeyPress}
-              onKeyUp={onKeyUp}
-              // onBlur={onBlur}
-            />
-          : todo.title
+    <>
+      <div
+        className={todoClasses.join(' ')}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+      >
+        
+        <Checkbox 
+          value={todo.isChecked} 
+          onChange={onCheckChange} 
+          size={24} 
+          isDisabled={isProgress}
+        />
+        <span className={classes.Todo__Text}>
+          {isEditMode
+            ? <Form.Control
+                as='input'
+                rows={1.5}
+                autoFocus={true}
+                size="sm"
+                type="text"
+                value={editedText}
+                onChange={onTodoTextChange}
+                onKeyPress={onKeyPress}
+                onKeyUp={onKeyUp}
+                style={{boxShadow: "none"}}
+                // onBlur={onBlur}
+              />
+            : todo.title
+          }
+        </span>
+        {isHovered && !isEditMode && !isProgress
+          ? <div className={classes.Todo__ButtonBox}>
+              <Button
+                onClick={onEditClick}
+                tooltipTitle='Edit todo'
+              >
+                <Pen size={20} className={classes.Todo__ButtonIcon} />
+              </Button>
+              <Button
+                onClick={onDeleteTodo}
+                tooltipTitle='Delete todo'
+              >
+                <XCircle size={20} className={classes.Todo__ButtonIcon} />
+              </Button>
+            </div>
+          : null
         }
-      </span>
-      {isHovered && !isEditMode && !isProgress
-        ? <>
-            <Button
-              onClick={onEditClick}
-              tooltipTitle='Edit todo'
-            >
-              <Pen size={20} className={classes.Todo__ButtonIcon} />
-            </Button>
-            <Button
-              onClick={onDeleteTodo}
-              tooltipTitle='Delete todo'
-            >
-              <XCircle size={20} className={classes.Todo__ButtonIcon} />
-            </Button>
-          </>
-        : null
-      }
-      {isEditMode && !isProgress
-        ? <>
-            <Button
-              onClick={onSaveEditing}
-              tooltipTitle='Save changes'
-            >
-              <Check2Circle size={20} className={classes.Todo__ButtonIcon} />
-            </Button>
-            <Button 
-              onClick={onBackReverse}
-              tooltipTitle = 'Cancel'
-            >
-              <BackspaceReverse size={20} className={classes.Todo__ButtonIcon} />
-            </Button>
-          </>
-        : null
-      }
-      {
-        isProgress &&
-        <Spinner className={classes.Todo__ProgressBar}/>
-      }
-    </div>
+        {isEditMode && !isProgress
+          ? <div className={classes.Todo__ButtonBox}>
+              <Button
+                onClick={onSaveEditing}
+                tooltipTitle='Save changes'
+              >
+                <Check2Circle size={20} className={classes.Todo__ButtonIcon} />
+              </Button>
+              <Button 
+                onClick={onBackReverse}
+                tooltipTitle = 'Cancel'
+              >
+                <BackspaceReverse size={20} className={classes.Todo__ButtonIcon} />
+              </Button>
+            </div>
+          : null
+        }
+        {
+          isProgress &&
+          <Spinner spinnerSize={{height: 20, width: 20}}/>
+        }
+      </div>
+      <Modal show={isModalShown} onClose={onModalClose} onConfirm={onDeleteTodoConfirm} title={'Are you sure you want to delete this todo?'}/>
+    </>
   );
 } 
 

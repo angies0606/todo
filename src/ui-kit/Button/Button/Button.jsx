@@ -16,6 +16,7 @@ function Button ({
       disableFocusListener={!isTooltipEnabled}
       disableHoverListener={!isTooltipEnabled}
       disableTouchListener={!isTooltipEnabled}
+      enterDelay={500} 
     >
       <button
         className={classNames(classes.Button, className)}

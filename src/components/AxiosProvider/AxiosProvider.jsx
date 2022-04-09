@@ -40,7 +40,7 @@ function AxiosProvider({children}) {
         enqueueSnackbar('Ups! Server error!', 'server_error');
       }
       if (error && !error.response) {
-        enqueueSnackbar('No Internet connection', 'internet_error')
+        enqueueSnackbar('Ups! Server is not available', 'server_error')
       }
 
       // вызываем Promise.reject для того, чтобы прокинуть ошибку дальше по цепочке сatch - в таком случае последующие then в цепочке не вызываются  

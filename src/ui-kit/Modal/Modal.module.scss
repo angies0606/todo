@@ -1,22 +1,4 @@
-.Dialog__Title {
-  margin: auto;
-  padding: 0 47px;
-  text-align: center;
-}
-
-.Dialog__Header {
-  display: flex;
-  justify-content: center;
-  border-bottom: 3px solid rgb(42,54,132);
-  position: relative;
-}
-
-.Dialog__HeaderCloseButton {
-  position: absolute;
-  right: 1rem;
-}
-
-.Dialog__CloseButton {
+.Modal__CloseButton {
   height: 24px;
   background-color: coral;
   color: #fff;
@@ -37,11 +19,18 @@
   text-transform: none;
 }
 
-.Dialog__CloseButton:hover {
+.Modal__CloseButton:hover {
   background-color: rgb(221, 99, 55);
 }
 
-.Dialog__CloseButton:active {
+.Modal__CloseButton:active {
   box-shadow: 0 0 0 4px rgb(245, 160, 129);
 }
 
+.Modal__Footer {
+  border-top: none;
+}
+
+.Modal__Header {
+  border-bottom: none;
+}

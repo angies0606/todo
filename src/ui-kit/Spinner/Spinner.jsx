@@ -1,7 +1,8 @@
 import CircularProgress from '@mui/material/CircularProgress';
 
 function Spinner({
-  className = ''
+  className = '',
+  spinnerSize
 }) {
 
   return (
@@ -9,10 +10,7 @@ function Spinner({
       <CircularProgress
         variant='indeterminate'
         color='warning'
-        style={{
-          height: 20,
-          width: 20
-        }}
+        style={spinnerSize}
         className={className}
       />
     </>

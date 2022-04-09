@@ -11,6 +11,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    putTodoList: todoList => {
+      dispatch(putTodoListsActionCreator([todoList]));
+    },
     addTodos: todos => {
       dispatch(putTodosActionCreator(todos));
     },

@@ -7,7 +7,7 @@ function SidebarContainer({children, className = ''}) {
   
     return (
     <div className={classes.SidebarContainer + ' ' + className}>
-      <SidebarConnected className={classes.SidebarContainer__Sidebar} />
+      <SidebarConnected />
       <div className={classes.SidebarContainer__Content}>
         {children}
       </div>

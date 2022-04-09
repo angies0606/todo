@@ -20,19 +20,31 @@ function TodosCollection ({
   className,
   scrollableId
 }) {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(null);
   const [hasMore, setHasMore] = useState(true);
 
-  function fetchMoreTodos() {
+  useEffect(() => {
+    if (!page) return;
+
     getTodos(page).then(() => {
-      setPage(page + 1);
       setHasMore(true);
     });
-  }
+  }, [page]);
 
   useEffect(() => {
-    fetchMoreTodos();
+    setPage(null);
   }, [todoListId]);
+
+  useEffect(() => {
+    if (!page) {
+      setPage(1);
+    }
+  }, [page]);
+
+  function fetchMoreTodos () {
+    setPage(page + 1);
+  }
+
 
   return (
     <InfiniteScroll

@@ -1,3 +1,17 @@
+.Sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 230px;
+  background-color: rgb(164, 201, 255);
+  align-items: center;
+  min-width: 170px;
+  // padding-bottom: 30px;
+}
+
+// .Sidebar--empty {
+//   justify-content: center;
+// }
+
 .Sidebar__NavLink {
   display: flex;
   justify-content: space-between;
@@ -5,13 +19,24 @@
   background-color: rgb(238, 244, 253);
   border: solid 1px rgb(42,54,134);
   border-radius: 0.25rem;
-  box-shadow: 2px 1px 1px rgb(51, 51, 66) ;
+  box-shadow: 2px 1px 1px rgb(51, 51, 66);
+  width: 100%;
+}
+
+.Sidebar__NavLinkTitle {
+  flex: 1 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  // min-width: 0;
+  padding-right: 5px;
 }
 
 .Sidebar__Link {
   text-decoration: none;
   color: rgb(33,37,41);
   font-weight: bold;
+  width: 100%;
 }
 
 .Sidebar__Link:hover {
@@ -27,3 +52,33 @@
   color: rgb(83, 105, 250);
 }
 
+.Sidebar__NoData {
+  width: 160px;
+  height: 190px;
+  margin-top: 100px;
+  color: rgb(255,255,255);
+  border-color:rgb(255,255,255);
+  padding: 20px 10px;
+}
+
+.Sidebar__NoDataImage {
+  height: 80px;
+}
+
+.Sidebar__NoDataText {
+  font-weight: bold;
+}
+
+.Sidebar__Scrollbar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.Sidebar__ScrollbarY {
+  background: none;
+}
+
+.Sidebar__ModalCloseButton {
+
+}

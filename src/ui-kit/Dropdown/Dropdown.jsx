@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import BootstrapDropdown from "react-bootstrap/Dropdown";
 import classes from './Dropdown.module.scss';
@@ -7,7 +8,7 @@ import classNames from "classnames";
 
 
 function Dropdown (props) {
-  const iconClasses = classNames(classes.Dropdown, props.className);
+  const iconClasses = classNames(classes.Dropdown__Trigger, props.className);
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <span
       ref={ref}
@@ -15,9 +16,10 @@ function Dropdown (props) {
         e.preventDefault();
         onClick(e);
       }}
+      className={iconClasses}
     >
       {children}
-      <props.icon className={iconClasses} />
+      <props.icon />
     </span>
   ));
 

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import { useEffect, useState, useCallback } from 'react';
 import { CheckSquare, Square } from 'react-bootstrap-icons';
 import classes from './Checkbox.module.scss';
 
@@ -20,7 +21,8 @@ import classes from './Checkbox.module.scss';
 function Checkbox ({
   value,
   onChange,
-  size
+  size, 
+  isDisabled
 }) {
   // state = getStateFromProps(this.props);
  
@@ -30,15 +32,23 @@ function Checkbox ({
   //   }
   //   return null
   // }
-  const onClick = () => {
+
+ const onClick = () => {
+    if(isDisabled) return;
     const newValue = !value
     onChange && onChange(newValue);
   }
+
   return (
-    <span className={classes.Checkbox} onClick={() => onClick()} >
+    <span
+      className={classNames(classes.Checkbox, {
+        [classes['Checkbox--disabled']]: isDisabled
+      })}
+      onClick={onClick}
+    >
       {value
         ? <CheckSquare size={size} className={classes.Checkbox__CheckSquare} />
-        : <Square size={size}/>
+        : <Square size={size} />
       }
     </span>
   );

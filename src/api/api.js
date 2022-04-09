@@ -4,6 +4,10 @@ export function getTodoLists() {
   return axios.get('todo-lists');
 }
 
+export function getTodoList(todoListId) {
+  return axios.get(`todo-lists/${todoListId}`);
+}
+
 export async function deleteTodoList(todoList) {
   try {
     await axios.delete(`todo-lists/${todoList.id}`);

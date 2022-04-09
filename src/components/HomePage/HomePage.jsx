@@ -3,7 +3,7 @@ import classes from './HomePage.module.scss';
 import { Button } from "react-bootstrap";
 import TodoListDialog from "@dialogs/TodoListDialog/TodoListDialog";
 import { useState } from "react";
-import {useTodoListDialogContext} from '@dialogs/TodoListDialog/todoListDialog.context'
+import {useTodoListDialogContext} from '@dialogs/TodoListDialog/todoListDialog.context';
 
 function HomePage () {
   // const [isAddTodoListDialogVisible, setIsAddTodoListDialogVisible] = useState(false);
