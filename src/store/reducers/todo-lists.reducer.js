@@ -1,8 +1,8 @@
-import initialState from '@store/initial-state';
+import initialState from "@store/initial-state";
 import {
   PUT_TODO_LISTS,
   DELETE_TODO_LIST
-} from '@store/actions';
+} from "@store/actions";
 
 function reducer(state = initialState.todoLists, action) {
   switch (action.type) {

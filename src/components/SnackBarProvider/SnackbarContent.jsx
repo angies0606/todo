@@ -1,9 +1,9 @@
-import classes from './SnackbarContent.module.scss';
-import { SnackbarContent as NotistackSnackbarContent } from 'notistack';
-import { forwardRef } from 'react';
-import Button from '@ui-kit/Button/Button/Button';
-import {X, ShieldFillCheck, EmojiFrownFill, HddFill, WifiOff} from 'react-bootstrap-icons';
-import { useSnackbar} from 'notistack';
+import classes from "./SnackbarContent.module.scss";
+import { forwardRef } from "react";
+import useSnackbar from "./useSnackbar.js";
+import { SnackbarContent as NotistackSnackbarContent } from "notistack";
+import Button from "@ui-kit/Button/Button/Button";
+import { X, ShieldFillCheck, EmojiFrownFill, HddFill, WifiOff } from "react-bootstrap-icons";
 
 const SnackbarContent = ({id, data}, ref) => {
   const {closeSnackbar} = useSnackbar();
@@ -47,20 +47,15 @@ const SnackbarContent = ({id, data}, ref) => {
   return (
     <NotistackSnackbarContent ref={ref} onClick={close}>
       <div className={`${classes.SnackbarContent} ${SnackbarVariantClass()}`}>
-        <span className={classes.SnackbarContent__MessageBlock}>
-        {
-          CurrentIconVariant &&
-          <CurrentIconVariant size={20} className={classes.SnackbarContent__VariantIcon} />
-        }
-          {/* {data.variant === 'success'
-            ? <ShieldFillCheck size={20} className={classes.SnackbarContent__VariantIcon}/>
-            : data.variant === 'error'
-              ? <EmojiFrownFill size={20} className={classes.SnackbarContent__VariantIcon} />
-            : null
-          } */}
-
-        {data.message}
-        </span>
+        <div className={classes.SnackbarContent__IconBox}>
+          {
+            CurrentIconVariant &&
+            <CurrentIconVariant size={20} className={classes.SnackbarContent__VariantIcon} />
+          }
+        </div>
+        <div className={classes.SnackbarContent__MessageBlock}>
+          <span className={classes.SnackbarContent__Message}>{data.message}</span>
+        </div>
 
         <Button
           onClick={close}
@@ -74,5 +69,3 @@ const SnackbarContent = ({id, data}, ref) => {
 }
 
 export const SnackbarContentWithRef = forwardRef(SnackbarContent);
-
-

@@ -1,12 +1,9 @@
-import AppProviders from './AppProviders'
-import AppRouting from './AppRouting'
+import AppRouting from "./AppRouting";
 
 function App() {  
   return (
     <>
-      <AppProviders>
-        <AppRouting />
-      </AppProviders>
+      <AppRouting />
     </>
   );
 }

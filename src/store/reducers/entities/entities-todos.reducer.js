@@ -3,17 +3,11 @@ import {
   CHECK_TODO, 
   DELETE_TODOS, 
   EDIT_TODO
-} from '@store/actions';
-import initialState from '@store/initial-state';
+} from "@store/actions";
+import initialState from "@store/initial-state";
 
 function reducer(state = initialState.entities.todos, action) {
   switch (action.type) {
-    // case ADD_TODO: {
-    //   return {
-    //     ...state,
-    //     [action.data.id]: action.data
-    //   };
-    // }
     case PUT_TODOS: {
       const newState = {
         ...state
@@ -23,9 +17,8 @@ function reducer(state = initialState.entities.todos, action) {
       })
       return newState; 
     }
+
     case CHECK_TODO: {
-      // const todoId = action.data.todoId
-      // const isChecked = action.data.isChecked
       const {todoId, isChecked} = action.data;
       return {
         ...state,
@@ -35,6 +28,7 @@ function reducer(state = initialState.entities.todos, action) {
         }
       };
     }
+
     case DELETE_TODOS: {
       const newState = {...state};
       action.data.forEach(todoId => {
@@ -52,6 +46,7 @@ function reducer(state = initialState.entities.todos, action) {
         }
       };
     }
+    
     default:
       return state;
   }

@@ -1,7 +1,6 @@
-import classNames from 'classnames';
-import { useEffect, useState, useCallback } from 'react';
-import { CheckSquare, Square } from 'react-bootstrap-icons';
-import classes from './Checkbox.module.scss';
+import classes from "./Checkbox.module.scss";
+import classNames from "classnames";
+import { CheckSquare, Square } from "react-bootstrap-icons";
 
 // function Checkbox({value, onChange}) {
 //   return (

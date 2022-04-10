@@ -1,6 +1,6 @@
-import {connect} from 'react-redux';
-import {putTodoListsActionCreator} from '@store/actions';
-import TodoListDialogProvider from './TodoListDialogProvider';
+import {connect} from "react-redux";
+import {putTodoListsActionCreator} from "@store/actions";
+import TodoListDialogProvider from "./TodoListDialogProvider";
 
 const mapDispatchToProps = dispatch => {
   return {

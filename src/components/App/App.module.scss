@@ -5,12 +5,12 @@
   overflow-x: auto;
 }
 
-.Navbar {
+.App__SidebarContainer {
+  flex: 1 0 auto;
+}
+
+.App__Navbar {
   flex: 0 0 auto;
   background-color:rgb(8, 45, 99);
   min-height: 80px;
-}
-
-.SidebarContainer {
-  flex: 1 0 auto;
 }

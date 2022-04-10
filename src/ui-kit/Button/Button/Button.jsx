@@ -1,6 +1,6 @@
-import classes from './Button.module.scss';
-import Tooltip from '@ui-kit/Tooltip/Tooltip';
-import classNames from 'classnames';
+import classes from "./Button.module.scss";
+import classNames from "classnames";
+import Tooltip from "@ui-kit/Tooltip/Tooltip";
 
 function Button ({
   onClick,
@@ -20,37 +20,12 @@ function Button ({
     >
       <button
         className={classNames(classes.Button, className)}
-        // onMouseEnter={this.onMouseEnter}
-        // onMouseLeave={this.onMouseLeave}
         onClick={() => onClick()}
       >
         {children}
       </button>
     </Tooltip>
   )
-  
-
-  // onAddTodoListDialogClose = () => {
-  //   this.setState({
-  //     isAddTodoListDialogVisible: false
-  //   });
-  // }
-
-  // onMouseClick = () => {
-  //   this.props.isClicked();
-  // }
-
-  // onMouseEnter = () => {
-  //   this.setState({
-  //     hover: true
-  //   });
-  // }
-
-  // onMouseLeave = () => {
-  //   this.setState({
-  //     hover: false
-  //   });
-  // }
 }
 
 export default Button;

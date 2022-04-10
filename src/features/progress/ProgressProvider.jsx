@@ -1,6 +1,6 @@
-import Progress from './Progress';
-import {ProgressContext} from './progress.context';
 import {useProgress} from './useProgress';
+import {ProgressContext} from "./progress.context";
+import Progress from "./Progress";
 
 function ProgressProvider({children}) {
   const value = useProgress();

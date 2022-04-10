@@ -1,9 +1,10 @@
 // @ts-nocheck
-import {useState, useMemo, useCallback} from 'react';
-import {TodoListDialogContext} from './todoListDialog.context';
-import TodoListDialog from './TodoListDialog';
-import * as api from '@api/api';
-import useSnackbar from '@hooks/useSnackbar';
+import * as api from "@api/api";
+import {useState, useMemo, useCallback} from "react";
+import { useHistory } from "react-router-dom";
+import useSnackbar from "@components/SnackBarProvider/useSnackbar";
+import {TodoListDialogContext} from "./todoListDialog.context";
+import TodoListDialog from "./TodoListDialog";
 
 const DIALOG_MODE = {
   ADD: 'ADD',
@@ -20,6 +21,8 @@ function TodoListDialogProvider({
   const [dialogProps, setDialogProps] = useState({});
   const {enqueueSnackbar} = useSnackbar();
 
+  const history = useHistory();
+
   const closeTodoListDialog = useCallback(() => {
     setMode(DIALOG_MODE.CLOSED);
     setDialogProps({});
@@ -32,17 +35,19 @@ function TodoListDialogProvider({
     }).then((result) => {
       addTodoList(result);
       closeTodoListDialog();
+      history.push(`/todo-list/${result.id}`);
       enqueueSnackbar('New todo list was added successfully', 'success');
     })
     .catch((e) => {
       if(e?.response?.status >= 400 && e?.response?.status < 500) {
         enqueueSnackbar('Error! Adding todo list failed', 'error');
+      } else {
+        console.error(e);
       }
     });
-  }, [addTodoList, closeTodoListDialog, enqueueSnackbar]);
+  }, [addTodoList, closeTodoListDialog, enqueueSnackbar, history]);
 
   const onEditTodoList = useCallback(editedData => {
-
     return api.editTodoList(dialogProps.todoList.id, editedData)
       .then(result => {
         editTodoList(result);
@@ -89,7 +94,7 @@ function TodoListDialogProvider({
         title='Add new list'
         confirmText='Add'
         {...dialogProps}
-      ></TodoListDialog>
+      />
 
       <TodoListDialog
         show={mode === DIALOG_MODE.EDIT}
@@ -98,7 +103,7 @@ function TodoListDialogProvider({
         title='Edit list'
         confirmText='Edit'
         {...dialogProps}
-      ></TodoListDialog>
+      />
     </>
   );
 }

@@ -1,5 +1,5 @@
-import LinearProgress from '@mui/material/LinearProgress';
-import classes from './Progress.module.scss';
+import classes from "./Progress.module.scss";
+import LinearProgress from "@mui/material/LinearProgress";
 
 function Progress() {
   return (

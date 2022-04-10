@@ -14,14 +14,6 @@ export function putTodosActionCreator(todos) {
   };
 }
 
-// export const ADD_TODO = 'ADD_TODO';
-// export function addTodoActionCreator(todoData) {
-//   return {
-//     type: ADD_TODO,
-//     data: todoData
-//   };
-// }
-
 export const CHECK_TODO = 'CHECK_TODO';
 export function checkTodoActionCreator(todoId, isChecked) {
   return {
@@ -61,14 +53,3 @@ export function editTodoActionCreator(title, todoId) {
     }
   };
 }
-
-// export const EDIT_TODO_LIST = 'EDIT_TODO_LIST';
-// export function editTodoListActionCreator(todoListData, todoListId) {
-//   return {
-//     type: EDIT_TODO_LIST,
-//     data: {
-//       todoListData,
-//       todoListId
-//     }
-//   }
-// }

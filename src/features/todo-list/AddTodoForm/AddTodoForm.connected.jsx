@@ -1,6 +1,6 @@
-// Если компонент не понадобится - упразднить
-import {connect} from 'react-redux';
-import AddTodoForm from './AddTodoForm';
+//TODO: Если компонент не понадобится - упразднить
+import {connect} from "react-redux";
+import AddTodoForm from "./AddTodoForm";
 
 // const mapStateToProps = (state, ownProps) => {
 //   return {

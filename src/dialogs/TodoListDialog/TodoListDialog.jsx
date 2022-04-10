@@ -1,9 +1,9 @@
-import {useState, useEffect} from 'react';
-import Form from 'react-bootstrap/Form';
-import Dialog from '@ui-kit/Dialog/Dialog';
-import Spacer from '@ui-kit/Spacer/Spacer';
-import LinearProgress from '@mui/material/LinearProgress';
-import classes from './TodoListDialog.module.scss';
+import classes from "./TodoListDialog.module.scss";
+import {useState, useEffect} from "react";
+import Form from "react-bootstrap/Form";
+import Dialog from "@ui-kit/Dialog/Dialog";
+import Spacer from "@ui-kit/Spacer/Spacer";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const MAX_TITLE_SYMBOLS = 50;
 const MIN_TITLE_SYMBOLS = 3;
@@ -30,7 +30,6 @@ function TodoListDialog(props) {
     createdAt: null
   });
   const [isProgress, setIsProgress] = useState(false);
-
 
   useEffect(() => {
     if (props.todoList) {
@@ -110,12 +109,12 @@ function TodoListDialog(props) {
             isProgress &&
             <LinearProgress className={classes.TodoListDialog__ProgressBar} variant='indeterminate' color='warning' />
           }
-          <Form as="div">
-            <Form.Group controlId="title">
+          <Form as='div'>
+            <Form.Group controlId='title'>
               <Form.Label className={classes.TodoListDialog__Label}>Title <span>*</span></Form.Label>
               <Form.Control
-                autoComplete="off"
-                placeholder="Enter title"
+                autoComplete='off'
+                placeholder='Enter title'
                 onChange={onTitleChange}
                 maxLength={MAX_TITLE_SYMBOLS}
                 value={title.value}
@@ -127,14 +126,14 @@ function TodoListDialog(props) {
 
             <Spacer />
 
-            <Form.Group controlId="description">
+            <Form.Group controlId='description'>
               <Form.Label className={classes.TodoListDialog__Label}>Description</Form.Label>
               <Form.Control
-                autoComplete="off"
-                as="textarea"
+                autoComplete='off'
+                as='textarea'
                 rows={4}
                 maxLength={MAX_DESCRIPTION_SYMBOLS}
-                placeholder="Enter description"
+                placeholder='Enter description'
                 onChange={onDescriptionChange}
                 value={description.value}
                 style={{maxHeight: 150, minHeight: 70}}
@@ -143,7 +142,6 @@ function TodoListDialog(props) {
                  Maximum {MAX_DESCRIPTION_SYMBOLS} symbols
               </Form.Text>
             </Form.Group>
-              {/* {isProgress && <LinearProgress variant='indeterminate' color='primary' />} */}
           </Form>
         </>
       }

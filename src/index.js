@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import './index.scss';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './components/App/App';
-import reportWebVitals from './reportWebVitals';
-import store from '@store/store';
+import React from "react";
+import "./index.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
+import ReactDOM from "react-dom";
+import store from "@store/store";
+import reportWebVitals from "./reportWebVitals";
+import App from "./components/App/App";
+import { Provider } from "react-redux";
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,13 +1,12 @@
-import React from 'react';
-import Modal from 'react-bootstrap/Modal';
-import BootstrapButton from 'react-bootstrap/Button';
-import Button from '@ui-kit/Button/Button/Button';
-import ModalHeader from 'react-bootstrap/ModalHeader';
-import ModalTitle from 'react-bootstrap/ModalTitle';
-import ModalBody from 'react-bootstrap/ModalBody';
-import ModalFooter from 'react-bootstrap/ModalFooter';
-import CloseButton from 'react-bootstrap/CloseButton'
-import classes from './Dialog.module.scss';
+import classes from "./Dialog.module.scss";
+import Modal from "react-bootstrap/Modal";
+import BootstrapButton from "react-bootstrap/Button";
+import Button from "@ui-kit/Button/Button/Button";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import ModalTitle from "react-bootstrap/ModalTitle";
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalFooter from "react-bootstrap/ModalFooter";
+import CloseButton from "react-bootstrap/CloseButton";
 
 /**
  * Props:
@@ -60,7 +59,7 @@ function Dialog({
           {cancelText}
         </Button>
         <BootstrapButton
-          variant="primary"
+          variant='primary'
           onClick={handleConfirm}
           disabled={disableConfirm}
         >

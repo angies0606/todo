@@ -1,4 +1,6 @@
-import {useState, useEffect} from 'react';
+// @ts-ignore
+// @ts-nocheck
+import {useState, useEffect} from "react";
 
 function abortableFetch(request, opts) {
   const controller = new AbortController();

@@ -1,23 +1,20 @@
-import {useEffect, useRef, useState} from 'react';
-import {Link} from 'react-router-dom';
-import Nav from 'react-bootstrap/Nav';
-import {ThreeDotsVertical} from 'react-bootstrap-icons';
-import classes from './Sidebar.module.scss';
-import Dropdown from '@ui-kit/Dropdown/Dropdown';
-import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
-import {DragDropContext} from 'react-beautiful-dnd';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
-import * as api from '@api/api';
-import useSnackbar from '@hooks/useSnackbar';
-import {useTodoListDialogContext} from '@dialogs/TodoListDialog/todoListDialog.context';
-import toDoListImg from '@assets/images/todoList.png';
-import classNames from 'classnames';
-import { useProgressContext } from '@features/progress/progress.context';
-import NoData from '@ui-kit/NoData/NoData';
-import Tooltip from '@ui-kit/Tooltip/Tooltip';
-import Scrollbar from '@ui-kit/Scrollbar/Scrollbar';
-import Modal from '@ui-kit/Modal/Modal';
-import { Button } from 'react-bootstrap';
+import * as api from "@api/api";
+import classNames from "classnames";
+import classes from "./Sidebar.module.scss";
+import useSnackbar from "@components/SnackBarProvider/useSnackbar";
+import {useTodoListDialogContext} from "@dialogs/TodoListDialog/todoListDialog.context";
+import {useEffect, useState} from "react";
+import Nav from "react-bootstrap/Nav";
+import {Link} from "react-router-dom";
+import Scrollbar from "@ui-kit/Scrollbar/Scrollbar";
+import Modal from "@ui-kit/Modal/Modal";
+import NoData from "@ui-kit/NoData/NoData";
+import Tooltip from "@ui-kit/Tooltip/Tooltip";
+import Dropdown from "@ui-kit/Dropdown/Dropdown";
+import {ThreeDotsVertical} from "react-bootstrap-icons";
+// import {DragDropContext} from "react-beautiful-dnd";
+// import { Droppable, Draggable } from "react-beautiful-dnd";
+
 
 
 // const sidebarDnDId = 'sidebar';
@@ -25,27 +22,25 @@ import { Button } from 'react-bootstrap';
 function Sidebar({
   className = '',
   putTodoLists,
-  editTodoList,
   todoLists,
-  deleteTodoList,
-  todoListsIds
+  deleteTodoList
 }) {
-
-  // const [editedTodoList, setEditedTodoList] = useState(null);
-  const {enqueueSnackbar} = useSnackbar();
-  const {openEditTodoListDialog} = useTodoListDialogContext();
-  const {isProgress} = useProgressContext();
   const [isTodoListsReady, setIsTodoListsReady] = useState(false);
   const [isModalShown, setIsModalShown] = useState(false);
   const [todoList, setTodoList] = useState(null);
   
+  const {enqueueSnackbar} = useSnackbar();
 
+  const {openEditTodoListDialog} = useTodoListDialogContext();
+  
   useEffect(() => {
     api.getTodoLists().then(todoLists => {
-      todoLists? setIsTodoListsReady(true): setIsTodoListsReady(false);
+      setIsTodoListsReady(true);
       putTodoLists(todoLists);
     });
   }, [putTodoLists]);
+  
+  const isShowNoData = todoLists?.length === 0 && isTodoListsReady;
 
   const onDeleteTodoList = (todoList) => {
     setIsModalShown(true);
@@ -68,35 +63,14 @@ function Sidebar({
     ) 
   }
 
+  const todoListEditedMode = todoListInEditing => {
+    openEditTodoListDialog(todoListInEditing);
+  }
+
   const onModalClose = () => {
     setIsModalShown(false);
     setTodoList(null);
   }
-
-  // const onEditTodoListConfirm = (editedData) => {
-  //   return api.editTodoList(editedTodoList.id, editedData)
-  //     .then(result => {
-  //       editTodoList(result);
-  //       onEditTodoListDialogClose();
-  //     })
-  //     .then(() => {
-  //       onEditTodoListDialogClose();
-  //       enqueueSnackbar('Todo list was edited successfully', 'success')
-  //     })
-  //     .catch((e) => {
-  //       if(e?.response?.status >= 400 && e?.response?.status < 500) {
-  //         enqueueSnackbar('Error! Editing todo list failed', 'error'); 
-  //       }
-  //     })
-  // }
-  const todoListEditedMode = todoListInEditing => {
-    // setEditedTodoList(todoList);
-    openEditTodoListDialog(todoListInEditing);
-  }
-
-  // const onEditTodoListDialogClose = () => {
-  //   setEditedTodoList(null);
-  // }
 
   // const onDragEnd = (result) => {
   //   const {destination, source, draggableId} = result;
@@ -118,30 +92,27 @@ function Sidebar({
     
   // }
 
-  const isEmpty = todoLists && todoLists.length === 0 && !isProgress;
-  const isSidebarInProgress = isProgress && todoLists.length === 0;
-
   return (
   <>
     <Nav
-      defaultActiveKey="/home"
+      defaultActiveKey='/home'
       className={classNames(
         className,
         classes.Sidebar,
         {
-          [classes['Sidebar--empty']]: isEmpty
+          [classes['Sidebar--empty']]: isShowNoData
         }
       )}
     >
       {
-        isEmpty && isTodoListsReady || isSidebarInProgress ? 
+        isShowNoData &&
          <NoData 
           className={classes.Sidebar__NoData} 
           imageStyle={{height: 100, width: 80}} 
           message={'No todo lists yet'}
           />
-          : null
       }
+
       <Scrollbar
         className={classes.Sidebar__Scrollbar}
         scrollerId={classes.Sidebar__ScrollTarget}
@@ -152,11 +123,10 @@ function Sidebar({
           todoLists?.length > 0 &&
           todoLists.map((todoList, index) => {
             return (
-              <Tooltip title={todoList.title} placement='right' enterDelay={500}>
+              <Tooltip title={todoList.title} placement='right' enterDelay={500} key={todoList.id}>
                 <Link 
                   to={`/todo-list/${todoList.id}`}
                   className={classes.Sidebar__Link}
-                  key={todoList.id}
                 >
                   <Nav.Link
                     className={classes.Sidebar__NavLink}
@@ -187,24 +157,16 @@ function Sidebar({
         }
       </Scrollbar>
     </Nav>
+
     <Modal 
       show={isModalShown}
       onClose={onModalClose}
       onConfirm={onDeleteTodoListConfirm}
       title={'Are you sure you want to delete this todo list?'}
-    >
-    </Modal>
-   
-        
-    {/* <TodoListDialog
-      show={Boolean(editedTodoList)}
-      onClose={onEditTodoListDialogClose}
-      onConfirm={onEditTodoListConfirm}
-      title={'Edit list'}
-      confirmText={'Edit'}
-      todoList={editedTodoList}
-    /> */}
+    />
   </>
+    
+    
     // <>
     //   <DragDropContext onDragEnd={onDragEnd}>
     //     <Droppable droppableId={sidebarDnDId}>

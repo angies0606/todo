@@ -5,12 +5,7 @@
   background-color: rgb(164, 201, 255);
   align-items: center;
   min-width: 170px;
-  // padding-bottom: 30px;
 }
-
-// .Sidebar--empty {
-//   justify-content: center;
-// }
 
 .Sidebar__NavLink {
   display: flex;
@@ -28,7 +23,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  // min-width: 0;
   padding-right: 5px;
 }
 
@@ -40,8 +34,7 @@
 }
 
 .Sidebar__Link:hover {
-  color: rgb(33,37,41);;
-  
+  color: rgb(33,37,41);
 }
 
 .Sidebar__NavLink:hover {
@@ -77,8 +70,4 @@
 
 .Sidebar__ScrollbarY {
   background: none;
-}
-
-.Sidebar__ModalCloseButton {
-
 }

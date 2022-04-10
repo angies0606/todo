@@ -1,4 +1,3 @@
-import { style } from "@mui/system";
 import ReactScrollbar from "react-scrollbars-custom";
 
 function Scrollbar ({

@@ -9,7 +9,6 @@ module.exports = function override(config) {
     '@store': 'src/store',
     '@api': 'src/api',
     '@contexts': 'src/contexts',
-    '@hooks': 'src/hooks',
     '@assets': 'src/assets'
   })(config);
 

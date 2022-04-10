@@ -1,6 +1,5 @@
-import {connect} from 'react-redux';
-import {checkTodoActionCreator, editTodoActionCreator} from '@store/actions';
-import TodosCollection from './TodosCollection';
+import {connect} from "react-redux";
+import TodosCollection from "./TodosCollection";
 
 const mapStateToProps = (state, ownProps) => {
   const {todoListId} = ownProps;
@@ -11,18 +10,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  const {todoListId} = ownProps;
-  return {
-    // checkTodo: (todoId, isChecked) => {
-    //   dispatch(checkTodoActionCreator(todoId, isChecked));
-    // }
-    // editTodo: (title, todoId) => {
-    //   dispatch(editTodoActionCreator(title, todoId));
-    // }
-  };
-};
+// const mapDispatchToProps = (dispatch, ownProps) => {
+//   const {todoListId} = ownProps;
+//   return {
 
-const TodosCollectionConnected = connect(mapStateToProps, mapDispatchToProps)(TodosCollection);
+//   };
+// };
+
+const TodosCollectionConnected = connect(mapStateToProps)(TodosCollection);
 
 export default TodosCollectionConnected;

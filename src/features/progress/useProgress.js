@@ -1,10 +1,11 @@
-import {useReducer, useCallback, useEffect, useMemo} from 'react';
-import axios from '@api/axios';
+import axios from "@api/axios";
+import {useReducer, useCallback, useEffect, useMemo} from "react";
 
 /**
  * @param {number} state
  * @param {{ type: any; }} action
  */
+
 function progressReducer(state, action) {
   switch (action.type) {
     case 'increment':
@@ -22,12 +23,10 @@ export function useProgress() {
   const [progressCounter, dispatch] = useReducer(progressReducer, initialState);
 
   const increment = useCallback(() => {
-    // debugger
     dispatch({type: 'increment'})
   }, [dispatch]);
 
   const decrement = useCallback(() => {
-    // debugger
     dispatch({type: 'decrement'})
   }, [dispatch]);
 
@@ -47,7 +46,7 @@ export function useProgress() {
 
 function useProgressInAxiosInterceptors(increment, decrement) {
   useEffect(() => {
-    const requestInterceptorId = axios.interceptors.request.use(function (req) {
+    const requestInterceptorId = axios.interceptors.request.use(function(req) {
       increment();
       return req;
     });

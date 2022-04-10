@@ -1,6 +1,5 @@
-import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { passedTimeCalc } from './passedTimeCalc';
+import { useEffect, useState } from "react";
+import { passedTimeCalc } from "./passedTimeCalc";
 
 function DateBar ({
   creationDate
@@ -16,7 +15,8 @@ function DateBar ({
     if (timeout === null) {
       setCurrentTime(null);
       return;
-    }   
+    } 
+
     if(currentTimeout) {
       clearTimeout(currentTimeout);
     }
@@ -28,7 +28,6 @@ function DateBar ({
     setCurrentTimeout(timeoutId);
   }
   
-
   const refreshTime = () => {
     const {timeMessage, timeout} = passedTimeCalc(creationDate);
     setCurrentTime(timeMessage);

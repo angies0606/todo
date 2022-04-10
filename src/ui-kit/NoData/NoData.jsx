@@ -1,7 +1,7 @@
-import toDoListImg from '@assets/images/todoList.png';
-import classes from './NoData.module.scss';
-import classNames from 'classnames';
-import { FileTextFill } from 'react-bootstrap-icons';
+
+import classes from "./NoData.module.scss";
+import classNames from "classnames";
+import { FileTextFill } from "react-bootstrap-icons";
 
 function NoData ({
   className,

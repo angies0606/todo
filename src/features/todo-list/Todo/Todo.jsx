@@ -1,11 +1,13 @@
-import {useState, useCallback} from 'react'
-import Checkbox from '@ui-kit/Checkbox/Checkbox';
+// @ts-ignore
+// @ts-nocheck
 import classes from "./Todo.module.scss";
-import {BackspaceReverse, Check2Circle, Pen, XCircle} from 'react-bootstrap-icons';
-import Form from 'react-bootstrap/Form';
-import Button from '@ui-kit/Button/Button/Button';
-import Spinner from '@ui-kit/Spinner/Spinner';
-import Modal from '@ui-kit/Modal/Modal';
+import {useState, useCallback} from "react"
+import Form from "react-bootstrap/Form";
+import Modal from "@ui-kit/Modal/Modal";
+import Button from "@ui-kit/Button/Button/Button";
+import Spinner from "@ui-kit/Spinner/Spinner";
+import Checkbox from "@ui-kit/Checkbox/Checkbox";
+import {BackspaceReverse, Check2Circle, Pen, XCircle} from "react-bootstrap-icons";
 
 // function getStateFromProps(props) {
 //   return {
@@ -59,7 +61,6 @@ function Todo ({
   //   }
   // }, [setIsProgress, increment, decrement, progressCounter])
 
-  //TODO: вставить везде функции startProgress и endPogress где меняется isProgress
   const startProgress = useCallback(() => {
     setIsProgress(true);
   }, [setIsProgress]);
@@ -110,7 +111,7 @@ function Todo ({
   }
 
   const onSaveEditing = () => {
-    setIsProgress(true);
+    startProgress();
     editTodo({
       title: editedText, 
       id: todo.id
@@ -119,7 +120,7 @@ function Todo ({
       stopEditing();
     })
     .finally(() => {
-      setIsProgress(false);
+      endProgress();
     });
   }
 
@@ -131,23 +132,12 @@ function Todo ({
   }
   const onDeleteTodoConfirm = () => {
     setIsModalShown(false);
-    setIsProgress(true);
+    startProgress();
     deleteTodo()
     .finally(() => {
-      setIsProgress(false);
+      endProgress();
     })
   }
-
-  // const showSnackbar = (message) => {
-  //   enqueueSnackbar(message, {
-  //     variant: 'warning',
-  //     autoHideDuration: 3000,
-  //     anchorOrigin: {
-  //       vertical: 'top',
-  //       horizontal: 'left',
-  //     },    
-  //   });
-  // }
 
   const stopEditing = () => {
     setIsEditMode(false);
@@ -165,7 +155,6 @@ function Todo ({
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
       >
-        
         <Checkbox 
           value={todo.isChecked} 
           onChange={onCheckChange} 
@@ -185,7 +174,6 @@ function Todo ({
                 onKeyPress={onKeyPress}
                 onKeyUp={onKeyUp}
                 style={{boxShadow: "none"}}
-                // onBlur={onBlur}
               />
             : todo.title
           }
@@ -235,13 +223,3 @@ function Todo ({
 } 
 
 export default Todo;
-
-// this.props.editTodo({
-//   title: this.state.editText
-// });
-// this.setState({
-//   title: {
-//     value: '',
-//     isValid: false
-//   }
-// });

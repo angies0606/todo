@@ -1,21 +1,19 @@
-// import Card from 'react-bootstrap/Card';
-import Spacer from '@ui-kit/Spacer/Spacer';
-import AddTodoFormConnected from '@features/todo-list/AddTodoForm/AddTodoForm.connected';
-import { Redirect, useHistory } from 'react-router-dom';
-import TodosCollectionConnected from '@features/todo-list/TodosCollection/TodosCollection.connected';
-import classes from './TodoListCard.module.scss';
-import {useEffect, useCallback, useState, useRef} from 'react';
-import * as api from '@api/api';
-import useSnackbar from '@hooks/useSnackbar';
-import DateBar from '@ui-kit/DateBar/DateBar';
-// import { Scrollbar } from "react-scrollbars-custom";
-import classNames from 'classnames';
-import { useProgressContext } from '@features/progress/progress.context';
-import NoData from '@ui-kit/NoData/NoData';
-import Spinner from '@ui-kit/Spinner/Spinner';
-import Scrollbar from '@ui-kit/Scrollbar/Scrollbar';
-import Card from '@ui-kit/Card/Card';
-
+// @ts-ignore
+// @ts-nocheck
+import * as api from "@api/api";
+import classes from "./TodoListCard.module.scss";
+import {useEffect, useCallback, useRef} from "react";
+import { useProgressContext } from "@features/progress/progress.context";
+import { useHistory } from "react-router-dom";
+import useSnackbar from "@components/SnackBarProvider/useSnackbar";
+import AddTodoFormConnected from "@features/todo-list/AddTodoForm/AddTodoForm.connected";
+import TodosCollectionConnected from "@features/todo-list/TodosCollection/TodosCollection.connected";
+import Card from "@ui-kit/Card/Card";
+import DateBar from "@ui-kit/DateBar/DateBar";
+import Scrollbar from "@ui-kit/Scrollbar/Scrollbar";
+import Spacer from "@ui-kit/Spacer/Spacer";
+import NoData from "@ui-kit/NoData/NoData";
+import Spinner from "@ui-kit/Spinner/Spinner";
 
 const pageSize = 10;
 
@@ -39,8 +37,7 @@ function TodoListCard({
       history.push('/');
     }
     prevTodoListRef.current = todoList;
-  }, [todoList])
-
+  }, [todoList, history])
 
   const getTodos = useCallback((page) => {
     if (!todoList) {
@@ -50,9 +47,8 @@ function TodoListCard({
     return api.getTodos(todoList.id, page, pageSize)
       .then(todos => {
         addTodos(todos);
-        
       });
-  }, [todoList?.id, addTodos])
+  }, [todoList, addTodos])
 
   useEffect(() => {
     api.getTodoList(todoListId)
@@ -66,7 +62,7 @@ function TodoListCard({
       .catch(() => {
         history.push('/');
       });
-  }, [todoListId]);
+  }, [history, putTodoList, todoListId]);
 
   const isEmpty = todoList && todoList.todos.length === 0 && !isProgress;
 
@@ -88,11 +84,11 @@ function TodoListCard({
       })
       .then(([todoResult, todoListResult]) => {
         addTodo(todoResult, todoListResult);
-        enqueueSnackbar("New todo was added", "success");
+        enqueueSnackbar('New todo was added', 'success');
       })
       .catch((e) => {
         if(e?.response?.status >= 400 && e?.response?.status < 500) {
-          enqueueSnackbar("Error! Adding todo failed", "error"); 
+          enqueueSnackbar('Error! Adding todo failed', 'error'); 
         }
       })
   }
@@ -105,8 +101,6 @@ function TodoListCard({
     })
     .then(result => {
       deleteTodo(todoId, result);
-    })
-    .then(() =>{
       enqueueSnackbar('Todo was deleted successfully', 'success');
     })
     .catch((e) => {
@@ -124,7 +118,7 @@ function TodoListCard({
       editTodo(result);
     })
     .then(() => {
-      enqueueSnackbar('Todo was edited successfully','success');
+      enqueueSnackbar('Todo was edited successfully', 'success');
     })
     .catch((e) => {
       if(e?.response?.status >= 400 && e?.response?.status < 500) {
@@ -154,7 +148,6 @@ function TodoListCard({
   }
 
   return (
-
     <Card todoList={todoList} DateBar={<DateBar creationDate={todoList.createdAt}/>}>
       <Spacer />
 
@@ -189,57 +182,6 @@ function TodoListCard({
 
       <Spacer />
     </Card>
-    // <Card className={classes.Card}>
-    //   <Card.Header className={classNames(classes.TodoListCard__Header, "text-center")}>
-    //     <Card.Title>
-    //         {todoList.title}
-    //     </Card.Title>
-    //     <Card.Subtitle className="mb-2 text-muted">
-    //       {todoList.description}
-    //     </Card.Subtitle>
-    //     <Card.Subtitle className={classNames(classes.TodoListCard__Subtitle, "text-muted")}>
-    //       <DateBar creationDate={todoList.createdAt}/>
-    //     </Card.Subtitle>
-    //   </Card.Header>
-    //   <Card.Body className={classes.TodoListCard__CardBody}>
-
-    //     <Spacer />
-
-    //     <AddTodoFormConnected
-    //       todoListId={todoList.id}
-    //       onAddTodo={onAddTodo}
-    //     />
-
-    //     <Spacer />
-
-    //     <Scrollbar
-    //       className={classes.TodoListCard__Scrollbar}
-    //       scrollerId={classes.TodoListCard__ScrollTarget}
-    //     >
-    //       {isEmpty &&
-    //         <NoData 
-    //           className={classes.TodoListCard__NoData}
-    //           imageStyle={{height: 130, width: 80}}
-    //           message={'No todos yet'}
-    //         />
-    //       }
-    //       <TodosCollectionConnected
-    //         className={classes.TodoListCard__TodosCollection}
-    //         todoListId={todoList.id}
-    //         onDeleteTodo={onDeleteTodo}
-    //         onEditTodo={onEditTodo}
-    //         onCheckTodo={onCheckTodo}
-    //         getTodos={getTodos}
-    //         scrollableId={classes.TodoListCard__ScrollTarget}
-    //       />
-    //     </Scrollbar>
-        
-    //     <Spacer />
-
-    //   </Card.Body>
-    //   <Card.Footer className={classes.TodoListCard__Footer} />
-    // </Card>
-
   );
 }
 

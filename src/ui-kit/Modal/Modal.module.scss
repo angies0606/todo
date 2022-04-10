@@ -1,3 +1,11 @@
+.Modal__Footer {
+  border-top: none;
+}
+
+.Modal__Header {
+  border-bottom: none;
+}
+
 .Modal__CloseButton {
   height: 24px;
   background-color: coral;
@@ -25,12 +33,4 @@
 
 .Modal__CloseButton:active {
   box-shadow: 0 0 0 4px rgb(245, 160, 129);
-}
-
-.Modal__Footer {
-  border-top: none;
-}
-
-.Modal__Header {
-  border-bottom: none;
 }

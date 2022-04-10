@@ -33,7 +33,6 @@
 }
 
 .SnackbarContent__VariantIcon {
-  margin-right: 16px;
   background-color: transparent;
 }
 
@@ -54,3 +53,12 @@
   color: white;
 }
 
+.SnackbarContent__IconBox {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.SnackbarContent__Message {
+  line-height: 21px;
+}

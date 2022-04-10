@@ -1,7 +1,3 @@
-.NoData__Message {
-  font-weight: bold;
-}
-
 .NoData__Box {
   border: 5px solid;
   border-radius: 0.25rem;
@@ -9,4 +5,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+}
+
+.NoData__Message {
+  font-weight: bold;
 }

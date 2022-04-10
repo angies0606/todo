@@ -1,6 +1,6 @@
+import classes from "./Modal.module.scss";
 import BootstrapModal from "react-bootstrap/Modal"; 
 import BootstrapButton from "react-bootstrap/Button";
-import classes from "./Modal.module.scss";
 import Button from "@ui-kit/Button/Button/Button";
 
 function Modal ({
@@ -24,7 +24,7 @@ function Modal ({
         <Button onClick={onClose} className={classes.Modal__CloseButton}>
           Close
         </Button>
-        <BootstrapButton variant="primary" onClick={onConfirm}>
+        <BootstrapButton variant='primary' onClick={onConfirm}>
           Confirm
         </BootstrapButton>
       </BootstrapModal.Footer>

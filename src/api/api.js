@@ -1,4 +1,4 @@
-import axios from './axios'
+import axios from "./axios";
 
 export function getTodoLists() {
   return axios.get('todo-lists');
@@ -15,26 +15,8 @@ export async function deleteTodoList(todoList) {
     const requestPromises = todoList.todos.map(todoId => axios.delete(`todos/${todoId}`));
 
     await Promise.all(requestPromises);
-  } catch (e) {}
-
-  // fetch(`${apiUrl}/todo-lists/` + todoList.id, {
-  //   method: 'DELETE',
-  //   headers: {
-  //     'Content-Type': 'application/json;charset=utf-8'
-  //   }
-  // })
-  // .then(response => response.json())
-  //   .then(() => {
-  //     const requestPromises = todoList.todos.map(todoId => {
-  //       return fetch('http://localhost:8000/todos/' + todoId, {
-  //         method: 'DELETE',
-  //         headers: {
-  //           'Content-Type': 'application/json;charset=utf-8'
-  //         }
-  //       })
-  //     });
-  //     return Promise.all(requestPromises);
-  //   })
+  } 
+  catch (e) {}
 }
 
 export function editTodoList(todoListId, todoList) {
@@ -72,4 +54,3 @@ export function checkTodo(todoId, data) {
 export function addTodoList(data) {
   return axios.post('todo-lists', data);
 }
-

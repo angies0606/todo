@@ -1,5 +1,5 @@
 
-import classes from './Spacer.module.scss';
+import classes from "./Spacer.module.scss";
 
 /**
  * Props:
@@ -13,9 +13,10 @@ function Spacer ({
     ? 'Spacer--horizontal'
     : 'Spacer--vertical'
   ]; 
+
   return (
     <div className={modeClass}></div>
   ); 
-
 }
+
 export default Spacer;

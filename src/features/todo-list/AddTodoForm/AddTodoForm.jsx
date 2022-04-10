@@ -1,9 +1,9 @@
-import {useState} from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Spacer from '@ui-kit/Spacer/Spacer';
-import classes from './AddTodoForm.module.scss';
-import { useProgressContext } from '@features/progress/progress.context';
+import classes from "./AddTodoForm.module.scss";
+import { useProgressContext } from "@features/progress/progress.context";
+import {useState} from "react";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Spacer from "@ui-kit/Spacer/Spacer";
 
 
 function AddTodoForm ({
@@ -14,11 +14,8 @@ function AddTodoForm ({
     isValid: false
   })
   const {isProgress} = useProgressContext();
-  // const [isProgress, setIsProgress] = useState(false);
 
   const onTitleChange = (e) => {
-    // const value = e.target.value;
-    // const isValid = value?.length >= 3;
     setTitle({
       value: e.target.value,
       isValid: e.target.value?.length >= 3
@@ -35,8 +32,6 @@ function AddTodoForm ({
   }
 
   const addTodoOnServer = () => {
-    // setIsProgress(true);
-
     const newTodo = {
       title: title.value,
       isChecked: false
@@ -50,37 +45,34 @@ function AddTodoForm ({
         });
       })
       .finally(() => {
-        // setIsProgress(false);
       });
   }
 
   const isDisabled = () => {
-    // return !title.isValid || isProgress;
     return !title.isValid || isProgress;
   }
 
   return (
-    <Form className={classes.AddTodo__Form} as="div">
-      <Form.Group controlId="title" className={classes.AddTodo__TitleField}>
+    <Form className={classes.AddTodoForm__Box} as='div'>
+      <Form.Group controlId='title' className={classes.AddTodoForm__TitleField}>
         <Form.Control
-          autoComplete="off"
-          placeholder="What needs to be done?"
+          autoComplete='off'
+          placeholder='What needs to be done?'
           value={title.value}
           onChange={onTitleChange}
           onKeyPress={onKeyPress}
         />
       </Form.Group>
 
-      <Spacer mode="horizontal"/>
+      <Spacer mode='horizontal'/>
 
       <Button
-        variant="primary"
+        variant='primary'
         disabled={isDisabled()}
         onClick={addTodoOnServer}
       >
         Add Todo
       </Button>
-      {/* {isProgress && <div>Working...</div>} */}
     </Form>
   );
 }
