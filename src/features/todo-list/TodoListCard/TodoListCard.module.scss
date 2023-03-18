@@ -1,5 +1,26 @@
-.Card {
-  height: 100%;
-  border: none;
-  border-radius: 0;
+.TodoListCard__Scrollbar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.TodoListCard__TodosCollection {
+  flex: 1;
+}
+
+#TodoListCard__ScrollTarget {
+  display: block;
+}
+
+.TodoListCard__NoData {
+  width: 250px;
+  height: 190px;
+  color: #bad4fa;
+  border-color: #bad4fa;
+  padding: 20px 10px;
+  margin: 33px auto 33px auto;
+}
+
+.TodoListCard__ProgressBar {
+  margin: auto;
 }

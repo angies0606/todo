@@ -1,90 +1,235 @@
-import { Link, withRouter } from 'react-router-dom';
-import Nav from 'react-bootstrap/Nav';
-import {ThreeDotsVertical} from 'react-bootstrap-icons';
-import classes from './Sidebar.module.scss';
-import Dropdown from '@ui-kit/Dropdown/Dropdown';
-import React from 'react';
-import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
+import * as api from "@api/api";
+import classNames from "classnames";
+import classes from "./Sidebar.module.scss";
+import useSnackbar from "@components/SnackBarProvider/useSnackbar";
+import {useTodoListDialogContext} from "@dialogs/TodoListDialog/todoListDialog.context";
+import {useEffect, useState} from "react";
+import Nav from "react-bootstrap/Nav";
+import {Link} from "react-router-dom";
+import Scrollbar from "@ui-kit/Scrollbar/Scrollbar";
+import Modal from "@ui-kit/Modal/Modal";
+import NoData from "@ui-kit/NoData/NoData";
+import Tooltip from "@ui-kit/Tooltip/Tooltip";
+import Dropdown from "@ui-kit/Dropdown/Dropdown";
+import {ThreeDotsVertical} from "react-bootstrap-icons";
+// import {DragDropContext} from "react-beautiful-dnd";
+// import { Droppable, Draggable } from "react-beautiful-dnd";
 
 
-class Sidebar extends React.Component {
 
-  state = {
-    editedTodoList: null
-  };
+// const sidebarDnDId = 'sidebar';
 
-  render() {
+function Sidebar({
+  className = '',
+  putTodoLists,
+  todoLists,
+  deleteTodoList
+}) {
+  const [isTodoListsReady, setIsTodoListsReady] = useState(false);
+  const [isModalShown, setIsModalShown] = useState(false);
+  const [todoList, setTodoList] = useState(null);
+  
+  const {enqueueSnackbar} = useSnackbar();
+
+  const {openEditTodoListDialog} = useTodoListDialogContext();
+  
+  useEffect(() => {
+    api.getTodoLists().then(todoLists => {
+      setIsTodoListsReady(true);
+      putTodoLists(todoLists);
+    });
+  }, [putTodoLists]);
+  
+  const isShowNoData = todoLists?.length === 0 && isTodoListsReady;
+
+  const onDeleteTodoList = (todoList) => {
+    setIsModalShown(true);
+    setTodoList(todoList);
+  }
+
+  const onDeleteTodoListConfirm = () => {
+    setIsModalShown(false);
     return (
-      <>
-        <Nav defaultActiveKey="/home" className={this.props.className + ' flex-column bg-light'}>
-          {
-            this.props.todoLists.map(todoList =>
-              <Nav.Link
-                key={todoList.id}
-                className={classes.NavLink}
-                as='span'
-              >
-                <Link to={`/todo-list/${todoList.id}`}>
-                  {todoList.title}
+      api.deleteTodoList(todoList)
+      .then(() => {
+        deleteTodoList(todoList);
+        enqueueSnackbar('Todo list was deleted successfully', 'success')
+      })
+      .catch((e) => {
+        if(e?.response?.status >= 400 && e?.response?.status < 500) {
+          enqueueSnackbar('Error! Deleting todo list failed', 'error'); 
+        }
+      })
+    ) 
+  }
+
+  const todoListEditedMode = todoListInEditing => {
+    openEditTodoListDialog(todoListInEditing);
+  }
+
+  const onModalClose = () => {
+    setIsModalShown(false);
+    setTodoList(null);
+  }
+
+  // const onDragEnd = (result) => {
+  //   const {destination, source, draggableId} = result;
+  //   if(!destination) {
+  //     return;
+  //   }
+  //   if (
+  //     destination.droppableId === source.droppableId &&
+  //     destination.index === <source className="index" />
+  //   ) {
+  //     return;
+  //   }
+  //   /* пока что в проекте присутствует одна колонка, в которой совершается DnD, 
+  //   когда будет групп с TodoLists - переписать константы column
+  //   */
+  //   const TodoListsIds = todoListsIds;
+  //   TodoListsIds.splice(source.index, 1);
+  //   TodoListsIds.splice(destination.index, 0 , draggableId);
+    
+  // }
+
+  return (
+  <>
+    <Nav
+      defaultActiveKey='/home'
+      className={classNames(
+        className,
+        classes.Sidebar,
+        {
+          [classes['Sidebar--empty']]: isShowNoData
+        }
+      )}
+    >
+      {
+        isShowNoData &&
+         <NoData 
+          className={classes.Sidebar__NoData} 
+          imageStyle={{height: 100, width: 80}} 
+          message={'No todo lists yet'}
+          />
+      }
+
+      <Scrollbar
+        className={classes.Sidebar__Scrollbar}
+        scrollerId={classes.Sidebar__ScrollTarget}
+        background={{background: 'none'}}
+        paddingBottom={{paddingBottom: 50}}
+      >
+        {
+          todoLists?.length > 0 &&
+          todoLists.map((todoList, index) => {
+            return (
+              <Tooltip title={todoList.title} placement='right' enterDelay={500} key={todoList.id}>
+                <Link 
+                  to={`/todo-list/${todoList.id}`}
+                  className={classes.Sidebar__Link}
+                >
+                  <Nav.Link
+                    className={classes.Sidebar__NavLink}
+                    as='span'
+                  >
+                    <span className={classes.Sidebar__NavLinkTitle}>
+                      {todoList.title}
+                    </span>
+                    <Dropdown
+                      icon={ThreeDotsVertical}
+                      className={classes.Sidebar__Dropdown} 
+                      items={[
+                        {
+                          title: 'Delete',
+                          onClick: () => onDeleteTodoList(todoList)
+                        },
+                        {
+                          title: 'Edit',
+                          onClick: () => todoListEditedMode(todoList)
+                        },
+                      ]}
+                    />
+                  </Nav.Link>
                 </Link>
-                <Dropdown
-                  icon={ThreeDotsVertical} 
-                  items={[
-                    {
-                      title: 'Delete',
-                      onClick: () => this.deleteTodoList(todoList)
-                    },
-                    {
-                      title: 'Edit',
-                      onClick: () => this.editTodoList(todoList)
-                    },
-                  ]}
-                />
-              </Nav.Link>
+              </Tooltip>
             )
-          }
-        </Nav>
-        {this.props.todoLists.map(todoList =>
-        <TodoListDialog
-          show={Boolean(this.state.editedTodoList)}
-          onClose={this.onEditTodoListDialogClose}
-          onConfirm={data => this.editConfirmed(data, todoList.id)}
-          title={'Edit list'}
-          confirmText={'Edit'}
-          todoList={this.state.editedTodoList}
-        />
-        )}
-      </>
-    )
-  }
+          })
+        }
+      </Scrollbar>
+    </Nav>
 
-  deleteTodoList = todoList => {
-    // // попробовать сделать это через react redux router
-    // // https://github.com/supasate/connected-react-router
-    // if (this.props.history.location.pathname === `/todo-list/${todoList.id}`) {
-    //   this.props.history.push('/');
-    // }
-    this.props.deleteTodoList(todoList.id);
-  }
+    <Modal 
+      show={isModalShown}
+      onClose={onModalClose}
+      onConfirm={onDeleteTodoListConfirm}
+      title={'Are you sure you want to delete this todo list?'}
+      isCloseButtonShown={false}
+    />
+  </>
+    
+    
+    // <>
+    //   <DragDropContext onDragEnd={onDragEnd}>
+    //     <Droppable droppableId={sidebarDnDId}>
+    //       {(provided) => (
+    //         <Nav 
+    //           defaultActiveKey="/home" 
+    //           className={className + ' flex-column '}
+    //           ref={provided.innerRef}
+    //           {...provided.droppableProps}
+    //         >
+    //           {
+    //             todoLists.map((todoList, index) =>
+    //               <Draggable key={todoList.id} draggableId={todoList.id.toString()} index={index}> 
+    //                 {(provided) => (
+    //                   <Nav.Link
+    //                     {...provided.draggableProps}
+    //                     {...provided.dragHandleProps}
+    //                     ref={provided.innerRef}
+    //                     className={classes.NavLink}
+    //                     as='span'
+    //                   >
+    //                     <Link 
+    //                       to={`/todo-list/${todoList.id}`}
+    //                       className={classes.NavLink__Link}
 
-  editTodoList = todoList => {
-    this.setState({
-      ...this.state,
-      editedTodoList: todoList
-    });
-  }
-
-  onEditTodoListDialogClose = () => {
-    this.setState({
-      ...this.state,
-      editedTodoList: null
-    });
-  }
-
-  editConfirmed = (data, todoListId) => {
-    this.props.editTodoList(data, todoListId);
-    this.onEditTodoListDialogClose();
-  }
+    //                     >
+    //                       {todoList.title}
+    //                     </Link>
+    //                     <Dropdown
+    //                       icon={ThreeDotsVertical} 
+    //                       items={[
+    //                         {
+    //                           title: 'Delete',
+    //                           onClick: () => onDeleteTodoList(todoList)
+    //                         },
+    //                         {
+    //                           title: 'Edit',
+    //                           onClick: () => todoListIsEdited(todoList)
+    //                         },
+    //                       ]}
+    //                     />
+    //                   </Nav.Link>
+    //                 )}
+    //               </Draggable>
+    //             )
+    //           }
+    //           {provided.placeholder}
+    //         </Nav>
+    //       )}
+    //     </Droppable>
+    //   </DragDropContext>
+    //   <TodoListDialog
+    //     show={Boolean(editedTodoList)}
+    //     onClose={onEditTodoListDialogClose}
+    //     onConfirm={onEditTodoListConfirm}
+    //     title={'Edit list'}
+    //     confirmText={'Edit'}
+    //     todoList={editedTodoList}
+    //     mode={'editOld'}
+    //   />
+    // </>
+  )
 }
 
-export default withRouter(Sidebar);
+export default Sidebar;

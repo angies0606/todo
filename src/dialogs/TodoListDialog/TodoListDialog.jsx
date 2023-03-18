@@ -1,149 +1,165 @@
-import React from 'react';
-import Form from 'react-bootstrap/Form';
-import Dialog from '@ui-kit/Dialog/Dialog';
-import Spacer from '@ui-kit/Spacer/Spacer';
+import classes from "./TodoListDialog.module.scss";
+import {useState, useEffect, useRef} from "react";
+import Form from "react-bootstrap/Form";
+import Dialog from "@ui-kit/Dialog/Dialog";
+import Spacer from "@ui-kit/Spacer/Spacer";
+import LinearProgress from "@mui/material/LinearProgress";
 
-function getStateFromProps(props, state) {
-  return {
-    ...state,
-    show: props.show,
-    title: {
-      value: props.todoList?.title || '',
-      isValid: isTitleValid(props.todoList?.title)
-    },
-    description: {
-      value: props.todoList?.description || ''
-    },
-    prevProps: {
-      show: props.show
-    }
-  };
-}
+const MAX_TITLE_SYMBOLS = 50;
+const MIN_TITLE_SYMBOLS = 3;
+const MAX_DESCRIPTION_SYMBOLS = 350;
 
 function isTitleValid (value) {
-  return value?.length >= 3;
+  return value?.length >= MIN_TITLE_SYMBOLS && value?.length <= MAX_TITLE_SYMBOLS;
 }
 
-class TodoListDialog extends React.Component {
-  state = {
-    show: false,
-    prevProps: {
-      show: false
-    },
-    title: {
-      value: '',
-      isValid: false
-    },
-    description: {
-      value: ''
+function isDescriptionValid (value) {
+  return value?.length <= MAX_DESCRIPTION_SYMBOLS;
+}
+
+function TodoListDialog(props) {
+  const [title, setTitle] = useState({
+    value: '',
+    isValid: false
+  });
+  const [description, setDescription] = useState({
+    value: '',
+    isValid: true
+  });
+  const [timeCreation, setTimeCreation] = useState({
+    createdAt: null
+  });
+  const [isProgress, setIsProgress] = useState(false);
+
+  useEffect(() => {
+    if (props.todoList) {
+      setTitle({
+        value: props.todoList.title,
+        isValid: isTitleValid(props.todoList.title)
+      });
+      setDescription({
+        value: props.todoList.description,
+        isValid: isDescriptionValid(props.todoList.description)
+      });
+      setTimeCreation({
+        createdAt: props.todoList.createdAt
+      })
     }
+  }, [props.todoList]);
+
+  // let dialogFormRef = useRef(null);
+ 
+  const onConfirmTodoList = () => {
+    setIsProgress(true);
+
+    const todoListData = {
+      title: title.value,
+      description: description.value,
+      createdAt: timeCreation.createdAt || Date.now() 
+    }
+
+    props.onConfirm(todoListData)
+      .then(() => {
+        resetFormState();
+      })
+      .finally(() => {
+        setIsProgress(false);
+      });  
+  }
+
+  const onTitleChange = e => {
+    setTitle({
+      value: e.target.value,
+      isValid: isTitleValid(e.target.value)
+    });
   };
 
-  static getDerivedStateFromProps(props, state) {
-    if (state.prevProps.show !== props.show) {
-      return getStateFromProps(props, state);
-    }
-    return null;
-  }
-
-  handleClose = () => {
-    this.setState({
-      show: false
+  const onDescriptionChange = e => {
+    setDescription({
+      value: e.target.value,
+      isValid: isDescriptionValid(e.target.value)
     });
+  };
 
-    this.props.onClose();
+  const resetFormState = () => {
+    setTitle({
+      value: '',
+      isValid: false
+    });
+    setDescription({
+      value: '',
+      isValid: true
+    });
+    // dialogFormRef.current.reset();
   }
 
-  render() {
-    return (
-      <Dialog
-        show={this.props.show}
-        title={this.props.title}
-        body={
-          <Form as="div">
-            <Form.Group controlId="title">
-              <Form.Label>Title *</Form.Label>
+  const onClose = () => {
+    props.onClose();
+    resetFormState();
+  }
+
+  const isFormValid = () => {
+    return title?.isValid && description?.isValid;
+  }
+
+  return (
+    <Dialog
+      show={props.show}
+      title={props.title}
+      body={
+        <>
+          {
+            isProgress &&
+            <LinearProgress className={classes.TodoListDialog__ProgressBar} variant='indeterminate' color='warning' />
+          }
+          <Form 
+            as='div'
+            // ref={dialogFormRef}
+            defaultValue={''}
+          >
+            <Form.Group controlId='title'>
+              <Form.Label className={classes.TodoListDialog__Label}>Title <span>*</span></Form.Label>
               <Form.Control
-                autoComplete="off"
-                placeholder="Enter title (3+ symbols)"
-                onChange={this.onTitleChange}
-                value={this.state.title.value}
+                autoComplete='off'
+                placeholder='Enter title'
+                onChange={onTitleChange}
+                maxLength={MAX_TITLE_SYMBOLS}
+                value={title.value}
+                defaultValue={''}
               />
+              <Form.Text className={classes.TodoListDialog__HelperText}>
+                Enter at least {MIN_TITLE_SYMBOLS} up to {MAX_TITLE_SYMBOLS} symbols
+              </Form.Text>
             </Form.Group>
 
             <Spacer />
 
-            <Form.Group controlId="description">
-              <Form.Label>Description</Form.Label>
+            <Form.Group controlId='description'>
+              <Form.Label className={classes.TodoListDialog__Label}>Description</Form.Label>
               <Form.Control
-                autoComplete="off"
-                as="textarea"
-                rows={3}
-                placeholder="Enter description"
-                onChange={this.onDescriptionChange}
-                value={this.state.description.value}
+                autoComplete='off'
+                as='textarea'
+                rows={4}
+                maxLength={MAX_DESCRIPTION_SYMBOLS}
+                placeholder='Enter description'
+                onChange={onDescriptionChange}
+                value={description.value}
+                defaultValue={''}
+                style={{maxHeight: 150, minHeight: 70}}
               />
+              <Form.Text className={classes.TodoListDialog__HelperText}>
+                 Maximum {MAX_DESCRIPTION_SYMBOLS} symbols
+              </Form.Text>
             </Form.Group>
           </Form>
-        }
-        confirmText={this.props.confirmText}
-        disableConfirm={!this.isFormValid()}
-        onClose={this.onClose}
-        onConfirm={this.onConfirm}
-      />
-    );
-  }
-
-  onTitleChange = (e) => {
-    const value = e.target.value;
-    const isValid = isTitleValid(value);
-    this.setState({
-      ...this.state,
-      title: {
-        value,
-        isValid
+        </>
       }
-    });
-  }
-
-  onDescriptionChange = (e) => {
-    this.setState({
-      ...this.state,
-      description: {
-        value: e.target.value
-      }
-    });
-  }
-
-  resetFormState() {
-    this.setState({
-      ...this.state,
-      title: {
-        value: '',
-        isValid: false
-      },
-      description: {
-        value: ''
-      }
-    });
-  }
-
-  onClose = () => {
-    this.props.onClose();
-    this.resetFormState();
-  }
-
-  onConfirm = () => {
-    this.props.onConfirm({
-      title: this.state.title.value,
-      description: this.state.description.value
-    });
-    this.resetFormState();
-  }
-
-  isFormValid() {
-    return this.state.title?.isValid;
-  }
+      confirmText={props.confirmText}
+      disableConfirm={!isFormValid() || isProgress}
+      onClose={onClose}
+      onConfirm={onConfirmTodoList}
+    />
+  );
 }
 
 export default TodoListDialog;
