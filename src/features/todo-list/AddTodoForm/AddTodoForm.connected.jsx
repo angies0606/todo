@@ -1,17 +1,21 @@
-import {connect} from 'react-redux';
-import {addTodoActionCreator} from '@store/actions';
-import AddTodoForm from './AddTodoForm';
+//TODO: Если компонент не понадобится - упразднить
+import {connect} from "react-redux";
+import AddTodoForm from "./AddTodoForm";
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    addTodo: todoData => {
-      // имитация данных с бэка
-      todoData.id = Date.now().toString();
-      dispatch(addTodoActionCreator(todoData, ownProps.todoListId));
-    }
-  }
-}
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     todoList: state.entities.todoLists[ownProps.todoListId]
+//   };
+// };
 
-const AddTodoFormConnected = connect(null, mapDispatchToProps)(AddTodoForm);
+// const mapDispatchToProps = (dispatch, ownProps) => {
+//   return {
+//     addTodo: todoData => {
+//       dispatch(addTodoActionCreator(todoData, ownProps.todoListId));
+//     }
+//   }
+// }
+
+const AddTodoFormConnected = connect()(AddTodoForm);
 
 export default AddTodoFormConnected;

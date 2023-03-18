@@ -2,12 +2,15 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
 }
 
-.Navbar {
-  flex: 0 0 auto;
-}
-
-.SidebarContainer {
+.App__SidebarContainer {
   flex: 1 0 auto;
+}
+
+.App__Navbar {
+  flex: 0 0 auto;
+  background-color:rgb(8, 45, 99);
+  min-height: 80px;
 }

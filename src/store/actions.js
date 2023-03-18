@@ -1,20 +1,17 @@
-export const ADD_TODO_LIST = 'ADD_TODO_LIST';
-export function addTodoListActionCreator(todoList) {
+export const PUT_TODO_LISTS = 'PUT_TODO_LISTS';
+export function putTodoListsActionCreator(todoLists) {
   return {
-    type: ADD_TODO_LIST,
-    data: todoList
+    type: PUT_TODO_LISTS,
+    data: todoLists
   };
 }
 
-export const ADD_TODO = 'ADD_TODO';
-export function addTodoActionCreator(todo, todoListId) {
+export const PUT_TODOS = 'ADD_TODOS';
+export function putTodosActionCreator(todos) {
   return {
-    type: ADD_TODO,
-    data: {
-      todo,
-      todoListId
-    }
-  }
+    type: PUT_TODOS,
+    data: todos
+  };
 }
 
 export const CHECK_TODO = 'CHECK_TODO';
@@ -27,16 +24,15 @@ export function checkTodoActionCreator(todoId, isChecked) {
     }
   };
 }
-export const DELETE_TODO = 'DELETE_TODO';
-export function deleteTodoActionCreator(todoId, todoListId) {
+
+export const DELETE_TODOS = 'DELETE_TODOS';
+export function deleteTodosActionCreator(todosIds) {
   return {
-    type: DELETE_TODO,
-    data: {
-      todoId,
-      todoListId
-    }
-  }
+    type: DELETE_TODOS,
+    data: todosIds
+  };
 }
+
 export const DELETE_TODO_LIST = 'DELETE_TODO_LIST';
 export function deleteTodoListActionCreator(todoListId) {
   return {
@@ -44,8 +40,9 @@ export function deleteTodoListActionCreator(todoListId) {
     data: {
       todoListId
     }
-  }
+  };
 }
+
 export const EDIT_TODO = 'EDIT_TODO'
 export function editTodoActionCreator(title, todoId) {
   return {
@@ -54,16 +51,5 @@ export function editTodoActionCreator(title, todoId) {
       title,
       todoId
     }
-  }
-}
-
-export const EDIT_TODO_LIST = 'EDIT_TODO_LIST';
-export function editTodoListActionCreator(todoListData, todoListId) {
-  return {
-    type: EDIT_TODO_LIST,
-    data: {
-      todoListData,
-      todoListId
-    }
-  }
+  };
 }

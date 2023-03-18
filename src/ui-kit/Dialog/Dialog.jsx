@@ -1,19 +1,12 @@
-import React from 'react';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import ModalHeader from 'react-bootstrap/ModalHeader';
-import ModalTitle from 'react-bootstrap/ModalTitle';
-import ModalBody from 'react-bootstrap/ModalBody';
-import ModalFooter from 'react-bootstrap/ModalFooter';
-
-function getStateFromProps(props) {
-  return {
-    show: props.show,
-    prevProps: {
-      show: props.show
-    }
-  };
-}
+import classes from "./Dialog.module.scss";
+import Modal from "react-bootstrap/Modal";
+import BootstrapButton from "react-bootstrap/Button";
+import Button from "@ui-kit/Button/Button/Button";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import ModalTitle from "react-bootstrap/ModalTitle";
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalFooter from "react-bootstrap/ModalFooter";
+import CloseButton from "react-bootstrap/CloseButton";
 
 /**
  * Props:
@@ -26,58 +19,55 @@ function getStateFromProps(props) {
  * - onClose: () => void
  * - onConfirm: (result) => void
  */
-class Dialog extends React.Component {
-  state = getStateFromProps(this.props);
+function Dialog({
+  onClose,
+  onConfirm,
+  show,
+  title,
+  body,
+  cancelText = 'Cancel',
+  confirmText = 'Ok',
+  disableConfirm
+}) {
+  const handleClose = () => {
+    onClose();
+  };
 
-  static getDerivedStateFromProps(props, state) {
-    if (state.prevProps.show !== props.show) {
-      return getStateFromProps(props);
-    }
-    return null;
-  }
+  const handleConfirm = () => {
+    onConfirm();
+  };
 
-  render() {
-    return (
-      <Modal show={this.state.show} onHide={this.handleClose}>
-        <ModalHeader closeButton={true}>
-          <ModalTitle>
-            {this.props.title}
-          </ModalTitle>
-        </ModalHeader>
-        <ModalBody>
-          {this.props.body}
-        </ModalBody>
-        <ModalFooter>
-          <Button variant="secondary" onClick={this.handleClose}>
-            {this.props.cancelText || 'Cancel'}
-          </Button>
-          <Button
-            variant="primary"
-            onClick={this.handleConfirm}
-            disabled={this.props.disableConfirm}
-          >
-            {this.props.confirmText || 'Ok'}
-          </Button>
-        </ModalFooter>
-      </Modal>
-    );
-  }
-
-  handleClose = () => {
-    this.setState({
-      show: false
-    });
-
-    this.props.onClose();
-  }
-
-  handleConfirm = () => {
-    this.setState({
-      show: false
-    });
-
-    this.props.onConfirm();
-  }
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <ModalHeader closeButton={false} className={classes.Dialog__Header}>
+        <ModalTitle className={classes.Dialog__Title}>
+          {title}
+        </ModalTitle>
+        <CloseButton
+          onClick={handleClose}
+          className={classes.Dialog__HeaderCloseButton}
+        />
+      </ModalHeader>
+      <ModalBody>
+        {body}
+      </ModalBody>
+      <ModalFooter>
+        <Button 
+          onClick={handleClose}
+          className={classes.Dialog__CloseButton}
+        >
+          {cancelText}
+        </Button>
+        <BootstrapButton
+          variant='primary'
+          onClick={handleConfirm}
+          disabled={disableConfirm}
+        >
+          {confirmText}
+        </BootstrapButton>
+      </ModalFooter>
+    </Modal>
+  );
 }
 
 export default Dialog;

@@ -1,71 +1,32 @@
-import classes from './AddTodoListButton.module.scss';
-import {Plus} from 'react-bootstrap-icons';
-import React from 'react';
-import TodoListDialog from '@dialogs/TodoListDialog/TodoListDialog';
+import classes from "./AddTodoListButton.module.scss";
+import {useTodoListDialogContext} from "@dialogs/TodoListDialog/todoListDialog.context";
+import Tooltip from "@ui-kit/Tooltip/Tooltip";
+import {Plus} from "react-bootstrap-icons";
 
-class AddTodoListButton extends React.Component {
 
-  state = {
-    hover: false,
-    isAddTodoListDialogVisible: false
-  };
+function AddTodoListButton (){
+  const {openAddTodoListDialog} = useTodoListDialogContext();
 
-  render() {
-    return (
-      <>
+  const onMouseClick = () => {
+    openAddTodoListDialog();
+  }
+
+  return (
+    <>
+      <Tooltip title='Add todo list' enterDelay={500}>
         <button
           className={classes.AddTodoListButton}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-          onClick={this.onMouseClick}
+          onClick={onMouseClick}
         >
           <Plus
-            className={classes.AddTodoListButton__icon}
+            className={classes.AddTodoListButton__Icon}
             size={35}
-            color={this.state.hover ? 'white' : 'coral'}
+            color={'white'}
           />
         </button>
-
-        <TodoListDialog
-          show={this.state.isAddTodoListDialogVisible}
-          onClose={this.onAddTodoListDialogClose}
-          onConfirm={this.addTodoList}
-          title={'Add new list'}
-          confirmText={'Add'}
-          
-        />
-      </>
-    )
-  }
-
-  onAddTodoListDialogClose = () => {
-    this.setState({
-      isAddTodoListDialogVisible: false
-    });
-  }
-
-  onMouseClick = () => {
-    this.setState({
-      isAddTodoListDialogVisible: true
-    });
-  }
-
-  onMouseEnter = () => {
-    this.setState({
-      hover: true
-    });
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      hover: false
-    });
-  }
-
-  addTodoList = (data) => {
-    this.onAddTodoListDialogClose();
-    this.props.addTodoList(data);
-  }
+      </Tooltip>
+    </>
+  )
 }
 
 export default AddTodoListButton;

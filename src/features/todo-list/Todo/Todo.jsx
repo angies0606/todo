@@ -1,10 +1,13 @@
-import {Component} from 'react'
-import Checkbox from '@ui-kit/Checkbox/Checkbox';
+// @ts-ignore
+// @ts-nocheck
 import classes from "./Todo.module.scss";
-import {BackspaceReverse, Check2Circle, Pen, XCircle} from 'react-bootstrap-icons';
-import Form from 'react-bootstrap/Form';
-import Button from '@ui-kit/Button/Button/Button';
-
+import {useState, useCallback} from "react"
+import Form from "react-bootstrap/Form";
+import Modal from "@ui-kit/Modal/Modal";
+import Button from "@ui-kit/Button/Button/Button";
+import Spinner from "@ui-kit/Spinner/Spinner";
+import Checkbox from "@ui-kit/Checkbox/Checkbox";
+import {BackspaceReverse, Check2Circle, Pen, XCircle} from "react-bootstrap-icons";
 
 // function getStateFromProps(props) {
 //   return {
@@ -20,14 +23,25 @@ import Button from '@ui-kit/Button/Button/Button';
  * - todo: object
  * - onCheck: (isChecked: boolean) => void
  */
-class Todo extends Component {
+function Todo ({
+  onCheck,
+  todo,
+  editTodo,
+  deleteTodo
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedText, setEditedText] = useState('');
+  const [isProgress, setIsProgress] = useState(false);
+  const [isModalShown, setIsModalShown] = useState(false);
+
 
   // state = getStateFromProps(this.props);
-  state = {
-    isHovered: false,
-    isEditMode: false,
-    editText: ''
-  }
+  // state = {
+  //   isHovered: false,
+  //   isEditMode: false,
+  //   editText: ''
+  // }
 
   // static getDerivedStateFromProps(props, state) {
   //   if (state.prevProps?.isEnabled !== props.isEnabled) {
@@ -36,143 +50,182 @@ class Todo extends Component {
   //   return null;
   // }
 
-  render() {
-    const todoClasses = [classes.Todo];
-    if(this.state.isEditMode) {
-      todoClasses.push(classes['Todo--edit']);
-    }
+  // const setProgresses = useCallback(value => {
+  //   setIsProgress(value)
+  //   debugger
+  //   console.log(progressCounter)
+  //   if (value) {
+  //     increment()
+  //   } else {
+  //     decrement()
+  //   }
+  // }, [setIsProgress, increment, decrement, progressCounter])
 
-    return (
+  const startProgress = useCallback(() => {
+    setIsProgress(true);
+  }, [setIsProgress]);
+
+  const endProgress = useCallback(() => {
+    setIsProgress(false);
+  }, [setIsProgress]);
+
+  const onCheckChange = useCallback(isChecked => {
+    startProgress();
+    onCheck({
+      id: todo.id,
+      isChecked: isChecked
+    }).finally(endProgress);
+  }, [startProgress, endProgress, onCheck, todo]);
+
+  const onEnter = () => {
+    setIsHovered(true);
+  }
+
+  const onLeave = () => {
+    setIsHovered(false);
+  }
+
+  const onEditClick = () => {
+    setIsEditMode(true);
+    setEditedText(todo.title);
+  }
+
+  const onTodoTextChange = e => {
+    setEditedText(e.target.value);
+  }
+
+  const onKeyPress = e => {
+    if (e.which === 13) {
+      onSaveEditing();
+    }
+  }
+
+  const onKeyUp = e => {
+    if (e.which === 27) {
+     stopEditing();
+    }
+  }
+
+  const onBackReverse = () => {
+    stopEditing();
+  }
+
+  const onSaveEditing = () => {
+    startProgress();
+    editTodo({
+      title: editedText, 
+      id: todo.id
+    })
+    .then(() => {
+      stopEditing();
+    })
+    .finally(() => {
+      endProgress();
+    });
+  }
+
+  const onDeleteTodo = () => {
+    setIsModalShown(true);
+  }
+  const onModalClose = () => {
+    setIsModalShown(false);
+  }
+  const onDeleteTodoConfirm = () => {
+    setIsModalShown(false);
+    startProgress();
+    deleteTodo()
+    .finally(() => {
+      endProgress();
+    })
+  }
+
+  const stopEditing = () => {
+    setIsEditMode(false);
+    setEditedText('');
+  }
+  const todoClasses = [classes.Todo];
+  if(isEditMode) {
+    todoClasses.push(classes['Todo--edit']);
+  }
+ 
+  return (
+    <>
       <div
         className={todoClasses.join(' ')}
-        onMouseEnter={this.onEnter}
-        onMouseLeave={this.onLeave}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
       >
-        <Checkbox value={this.props.todo.isChecked} onChange={this.onChange} size={24}/>
+        <Checkbox 
+          value={todo.isChecked} 
+          onChange={onCheckChange} 
+          size={24} 
+          isDisabled={isProgress}
+        />
         <span className={classes.Todo__Text}>
-          {this.state.isEditMode
+          {isEditMode
             ? <Form.Control
+                as='input'
+                rows={1.5}
                 autoFocus={true}
                 size="sm"
                 type="text"
-                value={this.state.editText}
-                onChange={this.onTodoTextChange}
-                onKeyPress={this.onKeyPress}
-                onKeyUp={this.onKeyUp}
-                // onBlur={this.onBlur}
+                value={editedText}
+                onChange={onTodoTextChange}
+                onKeyPress={onKeyPress}
+                onKeyUp={onKeyUp}
+                style={{boxShadow: "none"}}
               />
-            : this.props.todo.title
+            : todo.title
           }
         </span>
-        {this.state.isHovered && !this.state.isEditMode
-          ? <>
-              <Button 
-                icon={Pen}
-                onClick={this.onEditClick} 
-              />
+        {isHovered && !isEditMode && !isProgress
+          ? <div className={classes.Todo__ButtonBox}>
               <Button
-                icon={XCircle}
-                onClick={() => this.props.deleteTodo()} 
-              />
-            </>
+                onClick={onEditClick}
+                tooltipTitle='Edit todo'
+              >
+                <Pen size={20} className={classes.Todo__ButtonIcon} />
+              </Button>
+              <Button
+                onClick={onDeleteTodo}
+                tooltipTitle='Delete todo'
+              >
+                <XCircle size={20} className={classes.Todo__ButtonIcon} />
+              </Button>
+            </div>
           : null
         }
-        {this.state.isEditMode
-          ? <>
+        {isEditMode && !isProgress
+          ? <div className={classes.Todo__ButtonBox}>
               <Button
-                icon={Check2Circle}
-                onClick={this.save}
-              />
+                onClick={onSaveEditing}
+                tooltipTitle='Save changes'
+              >
+                <Check2Circle size={20} className={classes.Todo__ButtonIcon} />
+              </Button>
               <Button 
-                icon={BackspaceReverse}          
-                onClick={this.onBackReverse}
-              />
-            </>
+                onClick={onBackReverse}
+                tooltipTitle = 'Cancel'
+              >
+                <BackspaceReverse size={20} className={classes.Todo__ButtonIcon} />
+              </Button>
+            </div>
           : null
+        }
+        {
+          isProgress &&
+          <Spinner spinnerSize={{height: 20, width: 20}}/>
         }
       </div>
-    );
-  }
-
-  onChange = isChecked => {
-    this.props.onCheck(isChecked);
-    // this.setState({
-    //   ...this.state,
-    //   isDone
-    // });
-  };
-
-  onEnter = () => {
-    this.setState({
-      ...this.state,
-      isHovered: true
-    })
-  }
-
-  onLeave = () => {
-    this.setState({
-      ...this.state,
-      isHovered: false
-    })
-  }
-
-  onEditClick = () => {
-    this.setState({
-      ...this.state,
-      isEditMode: true,
-      editText: this.props.todo.title
-    })
-  }
-
-  onTodoTextChange = e => {
-    this.setState({
-      ...this.state,
-      editText: e.target.value
-    });
-  }
-
-  onKeyPress = e => {
-    switch (e.which) {
-      case 13:
-        this.save();
-        break;
-    }
-  }
-
-  onKeyUp = e => {
-    switch (e.which) {
-      case 27:
-        this.stopEditing();
-        break;
-    }
-  }
-
-  onBackReverse = () => {
-    this.stopEditing();
-  }
-
-  save = () => {
-    this.stopEditing();
-    this.props.editTodo(this.state.editText);
-  }
-
-  stopEditing = () => {
-    this.setState({
-      ...this.state,
-      isEditMode: false,
-      editText: ''
-    });
-  }
-}
+      <Modal 
+        show={isModalShown} 
+        onClose={onModalClose} 
+        onConfirm={onDeleteTodoConfirm} 
+        title={'Are you sure you want to delete this todo?'}
+        isCloseButtonShown={true}
+        />
+    </>
+  );
+} 
 
 export default Todo;
-
-// this.props.editTodo({
-//   title: this.state.editText
-// });
-// this.setState({
-//   title: {
-//     value: '',
-//     isValid: false
-//   }
-// });

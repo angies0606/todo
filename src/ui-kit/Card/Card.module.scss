@@ -1,0 +1,67 @@
+.Card__Box {
+  height: 82%;
+  border-radius: 4px;
+  width: 72%;
+  margin: auto;
+  border: 1px solid #2a3684;
+  min-width: 360px;
+  min-height: 480px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  box-sizing: border-box;
+}
+.Card__Header {
+  border-bottom: 4px solid #2a3684;
+  background-color: white;
+  align-items: center;
+  padding: 8px 16px;
+  margin-bottom: 0;
+  box-sizing: border-box;
+  display: block;
+  word-wrap: break-word;
+  text-align: center;
+  border-radius: 4px 4px 0 0;
+}
+
+.Card__Body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 16px 16px;
+  box-sizing: border-box;
+}
+
+.Card__Footer {
+  background-color: #2a3684;
+  height: 10%;
+  padding: 8px 16px;
+  border-top: 1px solid rgba(0,0,0,.125);
+  box-sizing: border-box;
+}
+
+.Card__Title {
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-weight: 500;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+
+.Card__Subtitle {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 2px;
+  margin-bottom: 0;
+  font-weight: 500;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+
+.Card__Description {
+  font-size: 16px;
+}

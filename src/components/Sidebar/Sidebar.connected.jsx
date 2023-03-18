@@ -1,38 +1,32 @@
-import { deleteTodoListActionCreator, editTodoListActionCreator} from '@store/actions';
-// import { push } from 'connected-react-router';
-import { connect } from 'react-redux';
-import Sidebar from './Sidebar';
+import { connect } from "react-redux";
+import {
+  deleteTodoListActionCreator,
+  deleteTodosActionCreator,
+  putTodoListsActionCreator
+} from "@store/actions";
+import Sidebar from "./Sidebar";
 
 const mapStateToProps = (state) => ({
-  todoLists: state.todoLists.map(todoListId => state.entities.todoLists[todoListId])
-  // routerState: state.router
+  todoLists: state.todoLists.map(todoListId => state.entities.todoLists[todoListId]),
+  todoListsIds: state.todoLists
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    editTodoList: (data, todoListId) => {
-      dispatch(editTodoListActionCreator(data, todoListId));
+    editTodoList: (todoList) => {
+      dispatch(putTodoListsActionCreator([todoList]));
     },
-    deleteTodoList: (todoListId) => {
-      dispatch(deleteTodoListActionCreator(todoListId));
-      // if (isRedirectToHome) {
-      //   dispatch(push('/'));
-      // }
+
+    deleteTodoList: (todoList) => {
+      dispatch(deleteTodoListActionCreator(todoList.id));
+      dispatch(deleteTodosActionCreator(todoList.todos));
+    },
+
+    putTodoLists: todoLists => {
+      dispatch(putTodoListsActionCreator(todoLists));
     }
   };
 };
-
-// const mergeProps = (stateProps, dispatchProps, ownProps) => {
-//   return {
-//     ...stateProps,
-//     ...dispatchProps,
-//     ...ownProps,
-//     deleteTodoList: todoListId => {
-//       const isCurrentlyActivated = stateProps.routerState.location.pathname === `/todo-list/${todoListId}`;
-//       dispatchProps.deleteTodoList(todoListId, isCurrentlyActivated);
-//     }
-//   };
-// }
 
 const SidebarConnected = connect(mapStateToProps, mapDispatchToProps)(Sidebar);
 

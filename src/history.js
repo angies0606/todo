@@ -1,4 +1,6 @@
-import { createBrowserHistory } from 'history';
+// @ts-ignore
+// @ts-nocheck
+import { createBrowserHistory } from "history";
 
 const history = createBrowserHistory();
 

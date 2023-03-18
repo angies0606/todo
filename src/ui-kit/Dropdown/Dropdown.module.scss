@@ -1,4 +1,9 @@
-.Dropdown {
-  flex-direction: row;
+.Dropdown__Trigger {
   cursor: pointer;
+  width: 25px;
+  display: flex;
+  flex-direction: row;
+  height: 25px;
+  align-items: center;
+  justify-content: center;
 }
