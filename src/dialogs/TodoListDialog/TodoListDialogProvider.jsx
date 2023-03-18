@@ -6,25 +6,19 @@ import useSnackbar from "@components/SnackBarProvider/useSnackbar";
 import {TodoListDialogContext} from "./todoListDialog.context";
 import TodoListDialog from "./TodoListDialog";
 
-const DIALOG_MODE = {
-  ADD: 'ADD',
-  EDIT: 'EDIT',
-  CLOSED: 'CLOSED'
-}
-
 function TodoListDialogProvider({
   children,
   addTodoList,
   editTodoList
 }) {
-  const [mode, setMode] = useState(DIALOG_MODE.CLOSED);
+  const [isVisible, setIsVisible] = useState(false);
   const [dialogProps, setDialogProps] = useState({});
   const {enqueueSnackbar} = useSnackbar();
 
   const history = useHistory();
 
   const closeTodoListDialog = useCallback(() => {
-    setMode(DIALOG_MODE.CLOSED);
+    setIsVisible(false);
     setDialogProps({});
   }, []);
 
@@ -62,15 +56,24 @@ function TodoListDialogProvider({
   }, [editTodoList, closeTodoListDialog, enqueueSnackbar, dialogProps]);
 
   const openAddTodoListDialog = useCallback(() => {
-    setMode(DIALOG_MODE.ADD);
+    setIsVisible(true);
+    setDialogProps({
+      todoList: null,
+      onConfirm: onAddTodoList,
+      title:'Add new list',
+      confirmText:'Add'
+    })
   }, [setDialogProps, closeTodoListDialog, onAddTodoList]);
 
   const openEditTodoListDialog = useCallback(todoListInEditing => {
     if (!todoListInEditing) return;
 
-    setMode(DIALOG_MODE.EDIT);
+    setIsVisible(true);
     setDialogProps({
-      todoList: todoListInEditing
+      todoList: todoListInEditing,
+      onConfirm: onEditTodoList,
+      title:'Edit list',
+      confirmText:'Edit'
     })
   },[setDialogProps, closeTodoListDialog, onEditTodoList]);
 
@@ -87,23 +90,14 @@ function TodoListDialogProvider({
         {children}
       </TodoListDialogContext.Provider>
 
-      <TodoListDialog
-        show={mode === DIALOG_MODE.ADD}
-        onClose={closeTodoListDialog}
-        onConfirm={onAddTodoList}
-        title='Add new list'
-        confirmText='Add'
-        {...dialogProps}
-      />
-
-      <TodoListDialog
-        show={mode === DIALOG_MODE.EDIT}
-        onClose={closeTodoListDialog}
-        onConfirm={onEditTodoList}
-        title='Edit list'
-        confirmText='Edit'
-        {...dialogProps}
-      />
+      {
+        isVisible &&
+        <TodoListDialog
+          show={isVisible}
+          onClose={closeTodoListDialog}
+          {...dialogProps}
+        />
+      }
     </>
   );
 }

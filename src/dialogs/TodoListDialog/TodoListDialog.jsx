@@ -1,5 +1,5 @@
 import classes from "./TodoListDialog.module.scss";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import Form from "react-bootstrap/Form";
 import Dialog from "@ui-kit/Dialog/Dialog";
 import Spacer from "@ui-kit/Spacer/Spacer";
@@ -46,6 +46,8 @@ function TodoListDialog(props) {
       })
     }
   }, [props.todoList]);
+
+  // let dialogFormRef = useRef(null);
  
   const onConfirmTodoList = () => {
     setIsProgress(true);
@@ -88,6 +90,7 @@ function TodoListDialog(props) {
       value: '',
       isValid: true
     });
+    // dialogFormRef.current.reset();
   }
 
   const onClose = () => {
@@ -109,7 +112,11 @@ function TodoListDialog(props) {
             isProgress &&
             <LinearProgress className={classes.TodoListDialog__ProgressBar} variant='indeterminate' color='warning' />
           }
-          <Form as='div'>
+          <Form 
+            as='div'
+            // ref={dialogFormRef}
+            defaultValue={''}
+          >
             <Form.Group controlId='title'>
               <Form.Label className={classes.TodoListDialog__Label}>Title <span>*</span></Form.Label>
               <Form.Control
@@ -118,6 +125,7 @@ function TodoListDialog(props) {
                 onChange={onTitleChange}
                 maxLength={MAX_TITLE_SYMBOLS}
                 value={title.value}
+                defaultValue={''}
               />
               <Form.Text className={classes.TodoListDialog__HelperText}>
                 Enter at least {MIN_TITLE_SYMBOLS} up to {MAX_TITLE_SYMBOLS} symbols
@@ -136,6 +144,7 @@ function TodoListDialog(props) {
                 placeholder='Enter description'
                 onChange={onDescriptionChange}
                 value={description.value}
+                defaultValue={''}
                 style={{maxHeight: 150, minHeight: 70}}
               />
               <Form.Text className={classes.TodoListDialog__HelperText}>

@@ -7,7 +7,8 @@ function Modal ({
   show,
   onConfirm,
   onClose,
-  title
+  title,
+  isCloseButtonShown
 }) {
   return (
     <BootstrapModal 
@@ -21,9 +22,11 @@ function Modal ({
       </BootstrapModal.Header>
       <BootstrapModal.Body className='text-center'>{title}</BootstrapModal.Body>
       <BootstrapModal.Footer className={classes.Modal__Footer}>
-        <Button onClick={onClose} className={classes.Modal__CloseButton}>
-          Close
-        </Button>
+        {isCloseButtonShown &&
+          <Button onClick={onClose} className={classes.Modal__CloseButton}>
+            Close
+          </Button>
+        }
         <BootstrapButton variant='primary' onClick={onConfirm}>
           Confirm
         </BootstrapButton>

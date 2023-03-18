@@ -13,7 +13,7 @@ function DateBar ({
 
   function updateTimeout(timeout) {
     if (timeout === null) {
-      setCurrentTime(null);
+      setCurrentTimeout(null);
       return;
     } 
 

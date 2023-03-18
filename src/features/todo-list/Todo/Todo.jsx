@@ -217,7 +217,13 @@ function Todo ({
           <Spinner spinnerSize={{height: 20, width: 20}}/>
         }
       </div>
-      <Modal show={isModalShown} onClose={onModalClose} onConfirm={onDeleteTodoConfirm} title={'Are you sure you want to delete this todo?'}/>
+      <Modal 
+        show={isModalShown} 
+        onClose={onModalClose} 
+        onConfirm={onDeleteTodoConfirm} 
+        title={'Are you sure you want to delete this todo?'}
+        isCloseButtonShown={true}
+        />
     </>
   );
 } 
