@@ -223,7 +223,7 @@ function Todo ({
         onConfirm={onDeleteTodoConfirm} 
         title={'Are you sure you want to delete this todo?'}
         isCloseButtonShown={true}
-        />
+      />
     </>
   );
 } 
