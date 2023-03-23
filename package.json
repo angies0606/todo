@@ -1,7 +1,7 @@
 {
   "name": "todo",
   "version": "0.1.0",
-  "homepage":"https://angies0606.github.io/todo/",
+  "homepage": "/todo",
   "private": true,
   "dependencies": {
     "-": "0.0.1",

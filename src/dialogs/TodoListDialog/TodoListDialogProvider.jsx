@@ -22,7 +22,7 @@ function TodoListDialogProvider({
     setDialogProps({});
   }, []);
 
-  const onAddTodoList = useCallback((newTodoList) => {
+  const onAddTodoList = useCallback(newTodoList => {
     return api.addTodoList({
       ...newTodoList,
       todos: []
@@ -41,8 +41,8 @@ function TodoListDialogProvider({
     });
   }, [addTodoList, closeTodoListDialog, enqueueSnackbar, history]);
 
-  const onEditTodoList = useCallback(editedData => {
-    return api.editTodoList(dialogProps.todoList.id, editedData)
+  const onEditTodoList = useCallback((editedData, todoList) => {
+    return api.editTodoList(todoList.id, editedData)
       .then(result => {
         editTodoList(result);
         closeTodoListDialog();
@@ -53,7 +53,7 @@ function TodoListDialogProvider({
           enqueueSnackbar('Error! Editing todo list failed', 'error'); 
         }
       });
-  }, [editTodoList, closeTodoListDialog, enqueueSnackbar, dialogProps]);
+  }, [editTodoList, closeTodoListDialog, enqueueSnackbar]);
 
   const openAddTodoListDialog = useCallback(() => {
     setIsVisible(true);
