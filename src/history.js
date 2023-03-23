@@ -1,7 +1,10 @@
 // @ts-ignore
 // @ts-nocheck
-import { createBrowserHistory } from "history";
+import { createHashHistory } from "history";
 
-const history = createBrowserHistory();
+const history = createHashHistory({
+  // basename: '/todo'
+  basename: '/'
+});
 
 export default history;

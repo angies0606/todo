@@ -58,7 +58,7 @@ function TodoListDialog(props) {
       createdAt: timeCreation.createdAt || Date.now() 
     }
 
-    props.onConfirm(todoListData)
+    props.onConfirm(todoListData, props.todoList)
       .then(() => {
         resetFormState();
       })
