@@ -6,7 +6,6 @@ import {useEffect, useCallback, useRef} from "react";
 import { useProgressContext } from "@features/progress/progress.context";
 import { useHistory } from "react-router-dom";
 import useSnackbar from "@components/SnackBarProvider/useSnackbar";
-import AddTodoFormConnected from "@features/todo-list/AddTodoForm/AddTodoForm.connected";
 import TodosCollectionConnected from "@features/todo-list/TodosCollection/TodosCollection.connected";
 import Card from "@ui-kit/Card/Card";
 import DateBar from "@ui-kit/DateBar/DateBar";
@@ -14,6 +13,7 @@ import Scrollbar from "@ui-kit/Scrollbar/Scrollbar";
 import Spacer from "@ui-kit/Spacer/Spacer";
 import NoData from "@ui-kit/NoData/NoData";
 import Spinner from "@ui-kit/Spinner/Spinner";
+import AddTodoForm from "../AddTodoForm/AddTodoForm";
 
 const pageSize = 10;
 
@@ -151,7 +151,7 @@ function TodoListCard({
     <Card todoList={todoList} DateBar={<DateBar creationDate={todoList.createdAt}/>}>
       <Spacer />
 
-      <AddTodoFormConnected
+      <AddTodoForm 
         todoListId={todoList.id}
         onAddTodo={onAddTodo}
       />

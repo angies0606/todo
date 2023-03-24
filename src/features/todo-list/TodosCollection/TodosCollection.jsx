@@ -2,10 +2,6 @@ import {useEffect, useState} from "react";
 import Todo from "@features/todo-list/Todo/Todo";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-/**
- * Props:
- * - todos: object[]
- */
 function TodosCollection ({
   todoListId,
   todos,

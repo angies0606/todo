@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spacer from "@ui-kit/Spacer/Spacer";
 
+const MIN_TODO_SYMBOLS = 3;
 
 function AddTodoForm ({
   onAddTodo
@@ -53,27 +54,31 @@ function AddTodoForm ({
   }
 
   return (
-    <Form className={classes.AddTodoForm__Box} as='div'>
-      <Form.Group controlId='title' className={classes.AddTodoForm__TitleField}>
-        <Form.Control
-          autoComplete='off'
-          placeholder='What needs to be done?'
-          value={title.value}
-          onChange={onTitleChange}
-          onKeyPress={onKeyPress}
-        />
-      </Form.Group>
+   <>
+      <Form className={classes.AddTodoForm__Box} as='div'>
+        <Form.Group controlId='title' className={classes.AddTodoForm__TitleField}>
+          <Form.Control
+            autoComplete='off'
+            placeholder='What needs to be done?'
+            value={title.value}
+            onChange={onTitleChange}
+            onKeyPress={onKeyPress}
+          />
+        </Form.Group>
+        <Spacer mode='horizontal'/>
 
-      <Spacer mode='horizontal'/>
-
-      <Button
-        variant='primary'
-        disabled={isDisabled()}
-        onClick={addTodoOnServer}
-      >
-        Add Todo
-      </Button>
-    </Form>
+        <Button
+          variant='primary'
+          disabled={isDisabled()}
+          onClick={addTodoOnServer}
+        >
+          Add Todo
+        </Button>
+      </Form>
+      <Form.Text className={classes.AddTodoForm__HelperText}>
+        Enter at least {MIN_TODO_SYMBOLS} symbols
+      </Form.Text>
+   </> 
   );
 }
 
