@@ -1,4 +1,3 @@
-
 import classes from "./Spacer.module.scss";
 
 /**

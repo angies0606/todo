@@ -15,8 +15,6 @@ import {ThreeDotsVertical} from "react-bootstrap-icons";
 // import {DragDropContext} from "react-beautiful-dnd";
 // import { Droppable, Draggable } from "react-beautiful-dnd";
 
-
-
 // const sidebarDnDId = 'sidebar';
 
 function Sidebar({
@@ -166,8 +164,6 @@ function Sidebar({
       isCloseButtonShown={false}
     />
   </>
-    
-    
     // <>
     //   <DragDropContext onDragEnd={onDragEnd}>
     //     <Droppable droppableId={sidebarDnDId}>

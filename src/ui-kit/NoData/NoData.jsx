@@ -1,4 +1,3 @@
-
 import classes from "./NoData.module.scss";
 import classNames from "classnames";
 import { FileTextFill } from "react-bootstrap-icons";
