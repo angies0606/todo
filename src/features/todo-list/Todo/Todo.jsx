@@ -9,20 +9,6 @@ import Spinner from "@ui-kit/Spinner/Spinner";
 import Checkbox from "@ui-kit/Checkbox/Checkbox";
 import {BackspaceReverse, Check2Circle, Pen, XCircle} from "react-bootstrap-icons";
 
-// function getStateFromProps(props) {
-//   return {
-//     isEnabled: Boolean(props.isEnabled),
-//     prevProps: {
-//       isEnabled: props.isEnabled
-//     }
-//   };
-// }
-
-/**
- * Props:
- * - todo: object
- * - onCheck: (isChecked: boolean) => void
- */
 function Todo ({
   onCheck,
   todo,
@@ -34,7 +20,6 @@ function Todo ({
   const [editedText, setEditedText] = useState('');
   const [isProgress, setIsProgress] = useState(false);
   const [isModalShown, setIsModalShown] = useState(false);
-
 
   // state = getStateFromProps(this.props);
   // state = {
@@ -222,7 +207,7 @@ function Todo ({
         onClose={onModalClose} 
         onConfirm={onDeleteTodoConfirm} 
         title={'Are you sure you want to delete this todo?'}
-        isCloseButtonShown={true}
+        isCloseButtonShown={false}
       />
     </>
   );

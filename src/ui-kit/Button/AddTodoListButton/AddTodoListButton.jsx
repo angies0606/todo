@@ -3,7 +3,6 @@ import {useTodoListDialogContext} from "@dialogs/TodoListDialog/todoListDialog.c
 import Tooltip from "@ui-kit/Tooltip/Tooltip";
 import {Plus} from "react-bootstrap-icons";
 
-
 function AddTodoListButton (){
   const {openAddTodoListDialog} = useTodoListDialogContext();
 

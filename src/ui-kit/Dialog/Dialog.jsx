@@ -8,17 +8,6 @@ import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
 import CloseButton from "react-bootstrap/CloseButton";
 
-/**
- * Props:
- * - show: boolean
- * - title: string
- * - body: jsx
- * - cancelText: string
- * - confirmText: string
- * - disableConfirm: boolean
- * - onClose: () => void
- * - onConfirm: (result) => void
- */
 function Dialog({
   onClose,
   onConfirm,
